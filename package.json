@@ -1,0 +1,1 @@
+{"name":"howxm-server","version":"1.0.0","description":"HOWXM: noticias financieras en tiempo real por WebSocket","main":"server.js","scripts":{"start":"node server.js","demo":"MOCK=1 node server.js"},"engines":{"node":">=18"},"license":"MIT"}
