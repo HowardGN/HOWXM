@@ -1,0 +1,801 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="dark"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>HOWXM</title>
+<style>
+:root{--bg:#070b16;--pn:#0e1424;--p2:#151e34;--bd:#212d49;--tx:#e9eefb;--mu:#8d9bb8;--ac:#b44dff;--ac2:#3d8bff;--up:#22d17f;--dn:#ff5a5f;--am:#f2b84b;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:light){:root:not([data-theme="dark"]){--bg:#eef1f8;--pn:#fff;--p2:#f3f5fb;--bd:#d9dfee;--tx:#10162a;--mu:#5c6985;--up:#0f9d58;--dn:#d93025;--am:#b7791f}}
+:root[data-theme="light"]{--bg:#eef1f8;--pn:#fff;--p2:#f3f5fb;--bd:#d9dfee;--tx:#10162a;--mu:#5c6985;--up:#0f9d58;--dn:#d93025;--am:#b7791f}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--tx);font:14px/1.5 system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
+.hide{display:none!important}.w{max-width:1200px;margin:0 auto;padding:12px}
+.up{color:var(--up)}.dn{color:var(--dn)}.am{color:var(--am)}small,.mu{color:var(--mu)}
+.card{background:var(--pn);border:1px solid var(--bd);border-radius:14px;padding:14px}h3{margin:0 0 8px;font-size:15px}
+.top{display:flex;justify-content:space-between;align-items:center;padding:6px 0 10px}.logo{font-weight:800;font-size:22px;letter-spacing:1px}.logo b{color:var(--ac)}
+.hero{display:grid;grid-template-columns:1.2fr 1fr;gap:14px;align-items:center;border-radius:18px;padding:22px;background:linear-gradient(120deg,#b44dff,#6a35e8 50%,#0d1a4d);color:#fff}@media(max-width:820px){.hero{grid-template-columns:1fr}}
+.hero h1{margin:0 0 6px;font-size:clamp(24px,5vw,36px)}.hero p{margin:0;opacity:.93}
+.steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:10px;margin:12px 0}.steps b{color:var(--ac)}
+.mc{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:12px}
+.mk{cursor:pointer;text-align:left;font:inherit;color:inherit;transition:transform .2s,border-color .2s}.mk:hover{transform:translateY(-3px);border-color:var(--ac)}
+.tag{display:inline-block;padding:3px 11px;border-radius:99px;font-weight:800;font-size:12.5px;color:#06100b}.t-up{background:var(--up)}.t-dn{background:var(--dn);color:#fff}.t-am{background:var(--am)}
+.btn{background:var(--p2);border:1px solid var(--bd);color:var(--tx);border-radius:9px;padding:8px 13px;cursor:pointer;font:inherit}.btn.p{background:var(--ac);border-color:var(--ac);color:#fff;font-weight:700}.btn.on{outline:2px solid var(--ac)}.btn:disabled{opacity:.5;cursor:default}
+.g{display:grid;grid-template-columns:1.25fr 1fr;gap:12px;margin-top:10px}@media(max-width:900px){.g{grid-template-columns:1fr}}
+.scr{background:#000;border-radius:10px;min-height:190px;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center;color:#8d9bb8}
+canvas#cv{width:100%;display:block;touch-action:none}
+.row{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+.fb{border:1px solid var(--am);color:var(--am);border-radius:10px;padding:8px 12px;margin:8px 0;font-size:13px}.fb a{color:var(--ac2);font-weight:700}
+.big{font-size:40px;font-weight:900;line-height:1.1}
+.kv{display:grid;grid-template-columns:auto 1fr;gap:3px 12px;font-size:13px;margin:6px 0}.kv span:nth-child(odd){color:var(--mu)}
+.bar{height:8px;border-radius:5px;background:var(--p2);overflow:hidden;margin:3px 0 8px}.bar i{display:block;height:100%;transition:width .5s}
+.cb{position:relative;height:8px;border-radius:5px;background:var(--p2);margin:3px 0 9px}.cb:after{content:"";position:absolute;left:50%;top:-2px;bottom:-2px;width:1px;background:var(--mu)}.cb i{position:absolute;top:0;bottom:0;border-radius:5px;transition:all .5s}
+.tabs{display:flex;gap:6px;margin:12px 0 8px;flex-wrap:wrap}.tabs .btn.on{background:var(--ac);border-color:var(--ac);color:#fff;outline:0}
+.sc{overflow-x:auto}table{width:100%;border-collapse:collapse;font-size:13px}th,td{text-align:left;padding:7px 6px;border-bottom:1px solid var(--bd);vertical-align:top}th{color:var(--mu);font-size:11.5px}
+a{color:var(--ac2)}.stk{display:flex;height:12px;border-radius:6px;overflow:hidden;margin:6px 0}ul{margin:4px 0 0;padding-left:18px}li{margin:3px 0}
+input[type=number]{padding:7px;border-radius:8px;border:1px solid var(--bd);background:var(--p2);color:var(--tx);font:inherit;width:130px}
+.chat{max-height:300px;overflow:auto}.chat p{margin:0 0 8px;padding:7px 10px;background:var(--p2);border-radius:10px}.chat small{display:block}
+/* Nubi */
+.nubi{display:flex;gap:10px;align-items:center}.nubi svg{width:150px;flex:none;filter:drop-shadow(0 8px 14px #0005)}
+.bub{position:relative;background:var(--p2);border:1px solid var(--bd);border-radius:14px;padding:10px 12px;min-height:74px;flex:1;font-size:13.5px;color:var(--tx)}
+.bub:before{content:"";position:absolute;left:-8px;top:26px;border:8px solid transparent;border-right-color:var(--bd);border-left:0}
+.hero .bub{background:#ffffff22;border-color:#ffffff44;color:#fff}.hero .bub:before{border-right-color:#ffffff44}
+.nm{font-weight:800;font-size:12px;color:var(--ac);display:block;margin-bottom:2px}.hero .nm{color:#ffe6ff}
+.bd{animation:fl 3.6s ease-in-out infinite;transform-box:fill-box;transform-origin:center}@keyframes fl{50%{transform:translateY(-8px)}}
+.shd{animation:sh 3.6s ease-in-out infinite;transform-box:fill-box;transform-origin:center}@keyframes sh{50%{transform:scale(.8);opacity:.5}}
+.eye{transform-box:fill-box;transform-origin:center;animation:bl 4.4s infinite}@keyframes bl{0%,94%,100%{transform:scaleY(1)}96%{transform:scaleY(.08)}}
+.pu{animation:lk 6s ease-in-out infinite}@keyframes lk{0%,100%{transform:translate(0,0)}25%{transform:translate(2px,-1px)}50%{transform:translate(-2px,1px)}75%{transform:translate(1px,2px)}}
+.sp1{animation:tw 2s infinite}.sp2{animation:tw 2.6s .7s infinite}.sp3{animation:tw 1.8s 1.1s infinite}@keyframes tw{0%,100%{opacity:.1;transform:scale(.6)}50%{opacity:1;transform:scale(1.1)}}
+.sp1,.sp2,.sp3{transform-box:fill-box;transform-origin:center}
+
+.m-happy .sun,.m-wow .sun{opacity:1}.m-sad .rain{opacity:1}.m-think .dots{opacity:1}
+.rays{transform-origin:185px 30px;animation:rt 8s linear infinite}@keyframes rt{to{transform:rotate(360deg)}}
+.dr{animation:dr 1s linear infinite}.dr:nth-child(2){animation-delay:.3s}.dr:nth-child(3){animation-delay:.6s}@keyframes dr{0%{transform:translateY(-6px);opacity:0}30%{opacity:1}100%{transform:translateY(22px);opacity:0}}
+.dt{animation:tw 1.2s infinite}.dt:nth-child(2){animation-delay:.2s}.dt:nth-child(3){animation-delay:.4s}
+.cur:after{content:"▍";animation:tw 1s infinite;color:var(--ac)}
+.ft{font-size:11.5px;color:var(--mu);margin:16px 0}
+.nubi{align-items:flex-start}.nubi svg{width:170px;flex:none}.nr{flex:1;min-width:0}
+.rb{animation:fl 3.6s ease-in-out infinite;transform-box:fill-box;transform-origin:center}
+#eyes{fill:#5ef0ff;filter:url(#gl)}.st{fill:none;stroke:#5ef0ff;stroke-width:6;stroke-linecap:round}
+.ant{animation:tw 1.4s infinite}.fx{opacity:0;transition:opacity .3s}
+.m-z .fz,.m-z .fz2{opacity:1;animation:fl 2s infinite}.m-l .fh,.m-h .fs{opacity:1;animation:fl 2s infinite}.m-t .fq{opacity:1}.m-s .fd,.m-a .fd{opacity:1}
+.chk{opacity:0;transition:.3s}.m-h .chk,.m-l .chk{opacity:.75}
+.armL{transform-origin:40px 157px}.armR{transform-origin:200px 157px}
+.m-h .armR,.m-l .armR{animation:wv .5s ease-in-out infinite alternate}@keyframes wv{to{transform:rotate(-38deg)}}
+.m-a .rb{animation:sk .22s infinite}@keyframes sk{50%{transform:translateX(3px)}}
+.m-w .rb{animation:bn .6s infinite}@keyframes bn{50%{transform:translateY(-12px)}}
+.talk #mo{animation:tk .22s infinite alternate;transform-box:fill-box;transform-origin:center}@keyframes tk{to{transform:scaleY(1.8)}}
+.scn #eyes{animation:sc 1.2s ease-in-out infinite alternate}@keyframes sc{from{transform:translateX(-9px)}to{transform:translateX(9px)}}
+#nb{cursor:pointer}.heard{min-height:16px;font-size:12px;color:var(--ac2);margin:4px 0}
+input[type=text],textarea,select{padding:8px;border-radius:8px;border:1px solid var(--bd);background:var(--p2);color:var(--tx);font:inherit;width:100%}.nr .row input{flex:1;min-width:120px;width:auto}
+.qk{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px}.qk button{background:var(--p2);border:1px solid var(--bd);color:var(--mu);border-radius:99px;padding:3px 10px;font-size:12px;cursor:pointer}.qk button:hover{border-color:var(--ac);color:var(--tx)}
+#chips{display:flex;gap:6px;flex-wrap:wrap;margin:0 0 8px}.ch{font-size:11.5px;border:1px solid var(--bd);background:var(--pn);border-radius:99px;padding:2px 10px;color:var(--mu)}.ch.up{color:var(--up)}.ch.dn{color:var(--dn)}.ch.am{color:var(--am)}
+.pg{position:relative;height:16px;border-radius:9px;background:linear-gradient(90deg,var(--dn),#6b7691 50%,var(--up));margin:10px 0 4px}.pg .zn{position:absolute;left:42%;width:16%;top:-3px;bottom:-3px;border:2px dashed var(--am);border-radius:8px}.pg b{position:absolute;top:-5px;width:8px;height:26px;border-radius:4px;background:var(--tx);transform:translateX(-50%);transition:left .6s;box-shadow:0 0 10px var(--ac)}
+.lb{display:flex;justify-content:space-between;font-size:12px}.big.pulse{animation:tw 1.6s infinite}
+.vt{padding:6px 8px;border-bottom:1px solid var(--bd);font-size:13px}.ck label{display:flex;gap:8px;align-items:flex-start;padding:4px 0;font-size:13px}.ck input{margin-top:3px}
+.hero{background:linear-gradient(120deg,#b44dff,#6a35e8 45%,#0b3d91 80%,#0d1a4d);background-size:200% 200%;animation:gr 12s ease infinite}@keyframes gr{50%{background-position:100% 50%}}
+#v2{width:100%;max-height:130px;border-radius:10px;background:#000;margin-top:8px}
+.card{transition:border-color .3s,box-shadow .3s}.card:hover{box-shadow:0 0 0 1px var(--ac)44}
+:root[data-theme="dark"]{--bg:#07081c;--pn:#12102e;--p2:#1b1942;--bd:#2d2a66;--tx:#eceafd;--mu:#9a98c8;--ac:#8b5cf6;--ac2:#5b8cff}
+body{font-size:15px;background:radial-gradient(1200px 600px at 85% -10%,#3b1d8a55,transparent),radial-gradient(900px 500px at -10% 30%,#1a3a8a40,transparent),var(--bg);background-attachment:fixed}
+.w{max-width:1520px;padding:18px 22px}.card{background:linear-gradient(160deg,#16133a,#0f0e2a);border-radius:18px;padding:18px;box-shadow:0 10px 30px #0006}
+h3{font-size:16px}.logo{font-size:26px}.big{font-size:44px}.btn{border-radius:11px;padding:9px 15px;transition:.2s}.btn:hover{border-color:var(--ac);transform:translateY(-1px)}.btn.p{background:linear-gradient(90deg,#8b5cf6,#5b8cff);border:0}
+.hero{border-radius:22px;padding:30px;background:linear-gradient(120deg,#6d28d9,#4338ca 55%,#0b1f6b)}.hero h1{font-size:clamp(28px,4vw,44px)}
+.mc{grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:16px}.mk{padding:22px}
+#auth{position:fixed;inset:0;z-index:50;display:grid;grid-template-columns:1.1fr 1fr;background:var(--bg)}@media(max-width:860px){#auth{grid-template-columns:1fr}.aL{display:none}}
+.aL{padding:18px}.sky{position:relative;height:100%;border-radius:26px;overflow:hidden;background:linear-gradient(#2a74dc,#8cc8ff 62%,#bfe3ff)}
+.grass{position:absolute;left:-10%;right:-10%;bottom:-10%;height:42%;background:radial-gradient(ellipse at 25% 0,#52c24a,#2c8a2c 70%);border-radius:50% 50% 0 0}.grass:after{content:"";position:absolute;inset:18% -20% -20% 30%;background:radial-gradient(ellipse at 60% 0,#3fae3f,#1f7a24 70%);border-radius:50%}
+.fc{position:absolute;background:#fff;border-radius:99px;opacity:.7;filter:blur(1px);animation:drift 40s linear infinite}@keyframes drift{from{transform:translateX(-30vw)}to{transform:translateX(70vw)}}
+#cloudL{position:absolute;left:50%;top:22%;width:min(70%,420px);transform:translateX(-50%);animation:fl 4s ease-in-out infinite;filter:drop-shadow(0 18px 24px #0a3a8a55)}
+.abub{position:absolute;left:50%;bottom:20%;transform:translateX(-50%);background:#fff;color:#14233f;border-radius:12px;padding:8px 16px;font-weight:600;box-shadow:0 8px 20px #0003;max-width:80%;text-align:center}
+.aR{display:flex;flex-direction:column;justify-content:center;max-width:430px;width:100%;margin:0 auto;padding:30px;gap:8px}.aR h2{margin:6px 0 0;font-size:28px}
+.seg{display:flex;background:var(--p2);border-radius:12px;padding:4px;margin:6px 0}.seg button{flex:1;border:0;background:none;color:var(--mu);padding:9px;border-radius:9px;cursor:pointer;font:inherit;font-weight:700}.seg button.on{background:linear-gradient(90deg,#8b5cf6,#5b8cff);color:#fff}
+.aR label{font-size:12px;color:var(--mu);margin-top:6px}#aerr{color:var(--dn);min-height:20px;font-size:13px}.shake{animation:sk .35s}
+#pick{position:fixed;inset:0;z-index:60;background:#05061ae6;backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center;flex-direction:column;gap:16px;padding:20px}
+.pcs{display:flex;gap:18px;flex-wrap:wrap;justify-content:center}.pc{width:290px;cursor:pointer;text-align:center;transition:.25s;border:2px solid var(--bd)}.pc:hover{transform:translateY(-6px) scale(1.02);border-color:var(--ac)}.pc svg{width:200px}
+#nubi{position:fixed;right:18px;bottom:60px;width:min(470px,calc(100vw - 24px));z-index:30;background:linear-gradient(160deg,#18153f,#0d0c28);border:1px solid var(--bd);border-radius:20px;padding:12px;box-shadow:0 18px 50px #000a}.nubi svg{width:140px}
+.mhd{display:flex;justify-content:space-between;align-items:center;cursor:grab;margin-bottom:6px;font-size:13px}.mhd button{background:var(--p2);border:1px solid var(--bd);color:var(--tx);border-radius:8px;padding:3px 9px;cursor:pointer;margin-left:4px;font-size:12px}
+.walk .rb{animation:wk .45s ease-in-out infinite}@keyframes wk{50%{transform:translateY(-10px) rotate(4deg)}}
+.cD #eyes{fill:#7a4a3a;filter:none}.cD .st{stroke:#7a4a3a}.cS #eyes{fill:#ff3ec8;filter:none}.cS .st{stroke:#ff3ec8}
+body{padding-bottom:70px}.sd{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}.sd .card{padding:12px}.sd b{display:block;font-size:22px}
+:root[data-theme="dark"]{--bg:#0a0612;--pn:#120a22;--p2:#1c1233;--bd:#ffffff;--tx:#f4efff;--mu:#a99bd0;--ac:#a855f7;--ac2:#7c3aed;--up:#5af2a0;--dn:#ff5d73;--am:#ffd25a}
+html,body{font-family:'VT323','Courier New',monospace}
+body{font-size:21px;line-height:1.15;background:linear-gradient(#ffffff0a 1px,transparent 1px) 0 0/100% 32px,linear-gradient(90deg,#ffffff0a 1px,transparent 1px) 0 0/32px 100%,radial-gradient(900px 500px at 90% -10%,#6d28d955,transparent),#0a0612;background-attachment:fixed}
+body:after{content:"";position:fixed;inset:0;pointer-events:none;background:repeating-linear-gradient(#0000 0 2px,#00000030 2px 3px);z-index:200}
+h1,h2,h3,.tag,.nm,th{font-family:'Silkscreen','Press Start 2P',monospace;letter-spacing:.5px}h3{font-size:14px;color:#fff}h3:before{content:">> ";color:var(--ac)}
+.card{border:3px solid #fff;border-radius:0;background:#120a22;box-shadow:6px 6px 0 #6d28d9;padding:16px}.card:hover{box-shadow:6px 6px 0 #a855f7}
+.btn{font-family:'Silkscreen',monospace;font-size:12px;border:3px solid #fff;border-radius:0;background:#1c1233;color:#fff;box-shadow:3px 3px 0 #6d28d9;padding:8px 12px;text-transform:uppercase}.btn:hover{transform:none;background:#2b1a4d}.btn:active{transform:translate(3px,3px);box-shadow:0 0 0}.btn.p{background:#7c3aed;border:3px solid #fff}.btn.on{background:#a855f7}
+input:not([type=checkbox]):not([type=range]):not([type=file]),textarea,select{width:100%;font-family:'VT323',monospace;font-size:22px;color:#fff;background:#0a0612;border:3px solid #fff;border-radius:0;padding:9px 11px;outline:0;box-shadow:inset 0 0 0 2px #2b1a4d}input:focus,textarea:focus,select:focus{border-color:#a855f7;box-shadow:inset 0 0 0 2px #a855f7}
+.gf{font-family:'Rubik Spray Paint','Sedgwick Ave Display',cursive;color:#fff;font-size:44px;line-height:1;letter-spacing:3px;transform:rotate(-3deg);-webkit-text-stroke:2px #7c3aed;paint-order:stroke fill;text-shadow:0 0 14px #a855f7,4px 4px 0 #4c1d95,-2px -2px 0 #c4b5fd;display:inline-block;animation:gfl 3s ease-in-out infinite}@keyframes gfl{50%{transform:rotate(-1deg) translateY(-3px);text-shadow:0 0 22px #c084fc,4px 4px 0 #4c1d95}}
+.top{align-items:flex-end;border-bottom:3px solid #fff;padding-bottom:10px;margin-bottom:8px}.mq{border:3px solid #fff;background:#a855f7;color:#0a0612;overflow:hidden;white-space:nowrap;font-family:'Silkscreen',monospace;font-size:12px;margin-bottom:14px}.mq div{display:inline-block;padding:5px 0;animation:mq 28s linear infinite}@keyframes mq{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+.hero{border:3px solid #fff;border-radius:0;background:linear-gradient(120deg,#4c1d95,#2b1065 60%,#0a0612);box-shadow:8px 8px 0 #7c3aed}.hero h1{font-size:clamp(18px,3vw,30px);line-height:1.3;text-shadow:3px 3px 0 #000}
+.steps .card:before{content:">> ";color:var(--ac)}.mk{border:3px solid #fff;padding:22px 20px}.mk h3:before{content:""}.mk:hover{transform:translate(-3px,-3px);box-shadow:9px 9px 0 #a855f7;border-color:#fff}
+.tag{border-radius:0;font-size:11px}.t-up{background:var(--up)}.t-am{background:var(--am)}.bar,.cb,.pg,.stk{border-radius:0;border:2px solid #fff}.bar i,.cb i,.stk i{border-radius:0}.bar i{background-image:repeating-linear-gradient(90deg,#0000 0 6px,#0a0612 6px 8px)}
+.bar{height:14px}.tabs .btn.on{background:#a855f7}.ch{border-radius:0;border:2px solid #fff;font-family:'Silkscreen',monospace;font-size:10px;background:#120a22}
+table,th,td{border-color:#ffffff33}.fb{border-radius:0;border:3px dashed var(--am)}.sd .card b{font-family:'Press Start 2P',monospace;font-size:16px}
+.big{font-family:'Press Start 2P',monospace;font-size:28px;line-height:1.3;text-shadow:3px 3px 0 #000}.scr{border:3px solid #fff;border-radius:0}
+.stk2{position:fixed;z-index:1;pointer-events:none;image-rendering:pixelated;animation:spin 9s steps(8) infinite;opacity:.9}@keyframes spin{to{transform:rotate(360deg)}}
+.sbox{height:120px;overflow:auto;border:3px solid #fff;background:#000;padding:10px;margin-bottom:14px;box-shadow:6px 6px 0 #6d28d9}.sbox::-webkit-scrollbar{width:12px}.sbox::-webkit-scrollbar-thumb{background:#a855f7;border:2px solid #fff}
+.tiles{display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:8px;margin-bottom:16px}.tile{border:3px solid #fff;background:#1c1233;padding:6px;text-align:center;font-size:15px;box-shadow:3px 3px 0 #6d28d9}.tile b{display:block;font-family:'Press Start 2P',monospace;font-size:14px;color:#a855f7;margin-bottom:3px}
+/* auth */
+#auth{background:#0a0612;grid-template-columns:1.15fr 1fr;z-index:300}.sky{border:4px solid #fff;border-radius:0;background:linear-gradient(#1b0a3f,#4c1d95 55%,#7c3aed);box-shadow:8px 8px 0 #a855f7;image-rendering:pixelated}.grass{background:repeating-linear-gradient(90deg,#14532d 0 16px,#166534 16px 32px);border-radius:0;border-top:6px solid #4ade80;height:26%;left:0;right:0;bottom:0}.grass:after{display:none}
+.fc{border-radius:0;background:#fff;opacity:.55;filter:none;box-shadow:12px 0 #fff,-12px 0 #fff,0 -8px #fff}
+#cloudL{width:min(62%,380px);top:20%;image-rendering:pixelated;filter:none;overflow:visible}#cloudL.type{animation:squash .22s steps(3)}#cloudL.shy{animation:shy 1.4s steps(6) infinite}#cloudL.err{animation:shk .12s steps(2) 5}#cloudL.ok{animation:hop .5s steps(5) 3}
+@keyframes squash{50%{transform:translateX(-50%) scale(1.07,.92)}}@keyframes shy{50%{transform:translateX(-50%) rotate(-5deg) translateY(-6px)}}@keyframes shk{50%{transform:translateX(-47%)}}@keyframes hop{50%{transform:translate(-50%,-40px)}}
+.abub{border-radius:0;border:4px solid #fff;background:#0a0612;color:#fff;font-size:22px;bottom:30%;box-shadow:5px 5px 0 #a855f7;font-weight:400}
+.seg{border:3px solid #fff;border-radius:0;background:#0a0612}.seg button{font-family:'Silkscreen',monospace;font-size:12px;border-radius:0;color:#fff}.seg button.on{background:#7c3aed}.aR label{font-family:'Silkscreen',monospace;font-size:11px;color:#c4b5fd;text-transform:uppercase}
+.rain i{position:absolute;width:6px;height:12px;background:#9ac7ff;animation:rn .5s steps(4) infinite;top:0}@keyframes rn{to{transform:translateY(60px);opacity:0}}
+/* pets */
+#world{position:fixed;inset:0;pointer-events:none;z-index:90}.pet{position:absolute;left:0;top:0;width:160px;pointer-events:auto;will-change:transform}.pet.away{display:none}
+.pw{position:relative;width:160px;height:160px}.spr{width:160px;height:160px;image-rendering:pixelated;display:block;overflow:visible;filter:drop-shadow(0 8px 0 #0008)}.pet.flip .spr{transform:scaleX(-1)}
+.pet .body{animation:brth 1.8s steps(2) infinite;transform-box:fill-box;transform-origin:bottom}@keyframes brth{50%{transform:scaleY(1.03)}}
+.pet.walk .pw{animation:wk .36s steps(2) infinite}@keyframes wk{50%{transform:translateY(-8px) rotate(3deg)}}.pet.dance .pw{animation:dn .5s steps(2) infinite}@keyframes dn{25%{transform:translateY(-14px) rotate(-8deg)}75%{transform:translateY(-14px) rotate(8deg)}}
+.pet.talk .mouth{animation:mt .22s steps(2) infinite;transform-box:fill-box;transform-origin:center}@keyframes mt{50%{transform:scaleY(1.9)}}.pet.sleep .pw{animation:slp 2.4s steps(3) infinite}@keyframes slp{50%{transform:translateY(5px) scale(1.02,.97)}}
+.pet.jump .pw{animation:jp .5s steps(5)}@keyframes jp{50%{transform:translateY(-46px)}}.pet.poof .pw{animation:pf .5s steps(5) forwards}@keyframes pf{to{transform:scale(0);opacity:0}}.pet.pin .pw{animation:pn .5s steps(5)}@keyframes pn{from{transform:scale(0);opacity:0}}
+.pet.look .eyes{transform:translate(1px,0)}.armL,.armR{transform-box:fill-box;transform-origin:50% 0}.pet.dance .armL{animation:aw .25s steps(2) infinite}.pet.dance .armR{animation:aw .25s steps(2) infinite reverse}.pet.cheer .armR,.pet.cheer .armL{animation:aw .3s steps(2) infinite}@keyframes aw{50%{transform:rotate(-30deg)}}
+.em{position:absolute;left:62px;top:-12px;font-family:'Press Start 2P',monospace;font-size:20px;color:#ffd25a;text-shadow:3px 3px 0 #000;animation:emo 1.4s steps(6) forwards;pointer-events:none}@keyframes emo{from{transform:translateY(8px);opacity:0}20%{opacity:1}to{transform:translateY(-22px);opacity:0}}
+.zz{position:absolute;right:6px;top:4px;font-family:'Press Start 2P',monospace;font-size:14px;color:#c4b5fd;animation:emo 2s steps(6) infinite;display:none}.pet.sleep .zz{display:block}
+.pf{position:absolute;width:8px;height:8px;background:#fff;pointer-events:none;animation:pfx .6s steps(6) forwards}@keyframes pfx{to{transform:translate(var(--dx),var(--dy));opacity:0}}
+.pbar{display:block;height:6px;width:96px;margin:2px auto 0;background:#a855f7;border:2px solid #fff;box-shadow:0 0 12px #a855f7;cursor:pointer;animation:pbl 2s steps(2) infinite}@keyframes pbl{50%{box-shadow:0 0 4px #a855f7}}
+.pmenu{position:absolute;left:50%;top:176px;transform:translateX(-50%);width:230px;background:#0a0612;border:4px solid #fff;box-shadow:5px 5px 0 #a855f7;padding:8px;z-index:5;display:none}.pet:hover .pmenu,.pet.open .pmenu{display:block}.pet.up .pmenu{top:auto;bottom:178px}
+.pmenu button{display:block;width:100%;text-align:left;background:none;border:0;color:#fff;font-family:'VT323',monospace;font-size:21px;padding:2px 6px;cursor:pointer}.pmenu button:hover{background:#7c3aed}.pmenu button:hover:before{content:"> "}.pmenu .mn{font-family:'Silkscreen',monospace;font-size:11px;color:#c4b5fd;margin-bottom:4px}
+.pmenu .qr{display:flex;gap:4px;margin-top:6px}.pmenu .qr input{font-size:18px;padding:4px 6px}.pmenu .qr .btn{padding:4px 8px;box-shadow:2px 2px 0 #6d28d9}
+#dlg{position:fixed;left:50%;bottom:58px;transform:translateX(-50%);width:min(780px,94vw);z-index:120;background:#0a0612;border:4px solid #fff;box-shadow:0 0 0 4px #7c3aed,8px 8px 0 4px #000;padding:12px 18px 14px;min-height:92px;animation:dlgi .25s steps(4)}@keyframes dlgi{from{transform:translateX(-50%) translateY(30px);opacity:0}}
+#dlg.hide{display:none}#dn{position:absolute;left:14px;top:-16px;background:#7c3aed;border:3px solid #fff;font-family:'Silkscreen',monospace;font-size:12px;padding:3px 10px;text-transform:uppercase}#dt{font-size:26px;line-height:1.1;min-height:56px}
+.arw{position:absolute;right:16px;bottom:10px;border:8px solid transparent;border-top:12px solid #fff;animation:bk .6s steps(2) infinite}@keyframes bk{50%{transform:translateY(5px)}}
+#pipnote{margin:8px 0}#nubi{display:none}
+.g3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:8px 0}@media(max-width:900px){.g3{grid-template-columns:1fr}}.nco{max-height:460px;overflow:auto;border:3px solid #fff;background:#0a0612;padding:6px}.ni{padding:7px 4px;border-bottom:1px dashed #ffffff33;font-size:19px;animation:nin .4s steps(4)}@keyframes nin{from{background:#a855f755;transform:translateX(-10px)}}.dot{display:inline-block;width:10px;height:10px;border:2px solid #000;margin-right:4px}.tg{color:#c4b5fd;border:1px solid #c4b5fd;padding:0 3px}</style><link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Silkscreen:wght@400;700&family=VT323&family=Rubik+Spray+Paint&display=swap" rel="stylesheet"></head><body><div id="auth"><div class="aL"><div class="sky"><span class="fc" style="top:9%;width:120px;height:22px"></span><span class="fc" style="top:32%;width:84px;height:16px;animation-delay:-18s"></span>
+<svg id="cloudL" viewBox="0 0 60 44" shape-rendering="crispEdges"><g id="cb"></g><g id="cle"><rect id="ce1" x="20" y="16" width="4" height="10" fill="#0a0612"/><rect id="ce2" x="34" y="16" width="4" height="10" fill="#0a0612"/></g><g id="clm"></g><g id="cbl" opacity="0"><rect x="14" y="27" width="5" height="3" fill="#ff9ac0"/><rect x="39" y="27" width="5" height="3" fill="#ff9ac0"/></g></svg>
+<div class="rain" id="rain" style="position:absolute;left:25%;right:25%;top:44%;height:60px"></div><div class="abub" id="abub">Hola. Soy la nube del barrio.</div><div class="grass"></div></div></div>
+<div class="aR"><div class="gf" style="font-size:54px;margin-bottom:10px">HOWXM</div><h2 id="at" style="margin:6px 0 0;font-size:16px;line-height:1.4">Crea tu cuenta</h2><p class="mu" style="margin:0">Tu espacio de análisis. La sesión se recuerda en este dispositivo.</p>
+<div class="seg"><button id="tUp" class="on" onclick="amode('up')">Crear cuenta</button><button id="tIn" onclick="amode('in')">Entrar</button></div>
+<label>Usuario</label><input type="text" id="au" autocomplete="username" maxlength="20" placeholder="tu_nombre"><label>Contraseña</label><input type="password" id="ap" autocomplete="current-password" placeholder="minimo 6 caracteres">
+<div id="ac2"><label>Repite la contraseña</label><input type="password" id="ap2" autocomplete="new-password" placeholder="otra vez"></div><div id="aerr"></div><button class="btn p" id="ago" style="padding:14px" onclick="doAuth()">Continuar</button>
+<small>Cada nombre de usuario es único. Si hay servidor disponible, el nombre queda reservado para todos; si no, solo en este navegador. No reutilices contraseñas importantes.</small></div></div>
+<div class="w hide" id="app">
+<div class="top"><div class="gf">HOWXM</div><span class="row" style="margin:0;align-items:center"><button class="btn" id="vb" onclick="togVoice()">Voz off</button><span class="ch" id="uc"></span><button class="btn" onclick="logout()">Salir</button></span></div><div class="mq"><div id="mqt"></div></div><div id="pipnote" class="card hide">El personaje está flotando en otra ventana. <button class="btn" onclick="if(PW)PW.close()">Traer de vuelta</button></div>
+<div id="chips"></div><div class="fb hide" id="mh"> El oro está cerrado por el fin de semana (≈ viernes 21:00 a domingo 22:00 UTC). Lo que veas no se mueve y no hay nada real que analizar hasta que abra.</div>
+<div class="fb hide" id="fb">Estás viendo HOWXM dentro de otra ventana y el navegador bloquea compartir pantalla ahí. Ábrela en su propia pestaña: <a href="https://claude.ai/artifact/NHQULaf9mYbS4Dcgj8esoA" target="_blank" rel="noopener">abrir HOWXM en pestaña nueva ↗</a> (o usa "Subir captura").</div>
+
+<div id="home">
+ <div class="hero"><div><h1 id="h1">Tu centro de análisis</h1><p>Elige un mercado, comparte tu gráfico de XM y yo mismo leo las velas en tu pantalla, las cruzo con toda la investigación y te digo si conviene comprar, vender o esperar. Todo funciona aquí mismo, sin depender de nadie más.</p></div><div id="nh"></div></div>
+ <div class="steps"><div class="card"><b>1</b> Elige el mercado</div><div class="card"><b>2</b> Comparte tu pantalla (o sube una captura) con el gráfico de XM</div><div class="card"><b>3</b> Marca la zona de velas y calibra precios</div><div class="card"><b>4</b> Nubi analiza en vivo y te dice qué hacer</div></div>
+ <div id="hbox"></div><div class="mc" id="mc"></div>
+</div>
+
+<div id="mv" class="hide">
+ <div class="row" style="margin:0"><button class="btn" onclick="back()">← Mercados</button><b id="mt" style="font-size:20px"></b></div>
+ <div class="g">
+  <div class="card"><h3> Tu gráfico de XM</h3>
+   <div class="scr" id="scr"><span id="ph">Aquí verás tu pantalla con mi análisis encima</span><canvas id="cv" class="hide"></canvas></div>
+   <div class="row"><button class="btn p" id="bs" onclick="share()"> Compartir pantalla</button><button class="btn" onclick="document.getElementById('fi').click()"> Subir captura</button><button class="btn" id="bx" onclick="stopShare()" disabled> Detener</button><button class="btn" onclick="share2()"> Pantalla 2 (X/noticias)</button><input type="file" id="fi" accept="image/*" hidden onchange="file(this.files[0])"></div>
+   <div class="row"><button class="btn" id="br" onclick="mode('roi')"> Ajustar zona (opcional: es automática)</button><button class="btn" id="bc" onclick="mode('cal')"> Calibrar precios</button><button class="btn" onclick="resetCal()">↺ Reiniciar</button></div>
+   <div class="row hide" id="calrow"><small id="calt"></small><input type="number" step="any" id="calv" placeholder="Precio"><button class="btn p" onclick="calOk()">OK</button></div>
+   <video id="v2" class="hide" muted playsinline></video><small id="sm" style="display:block;margin-top:8px">Puedes pegar una captura con Ctrl+V. Muestra solo velas y eje de precios; evita textos verdes/rojos dentro de la zona.</small></div>
+  <div>
+   <div class="card" style="margin-top:12px"><h3>Veredicto</h3><div id="rs"><small>Todavía no veo tu gráfico. Compártelo y te cuento.</small></div></div></div>
+ </div>
+ <div class="tabs" id="tabs"></div><div class="card" id="tb"></div>
+</div>
+<p class="ft">La información contenida en este sitio no constituye asesoramiento financiero ni recomendación de inversión. HOWXM es informativa. La lectura de velas se hace por análisis de píxeles de lo que muestra tu pantalla y puede equivocarse; el dossier es una foto del 2 oct 2026. El trading con CFD implica alto riesgo de pérdida: usa stop loss, arriesga poco por operación y verifica precio y spread en XM antes de operar.</p></div>
+
+<div id="world"></div><div id="dlg" class="hide"><div id="dn"></div><div id="dt"></div><i class="arw"></i></div><div id="nubi"></div>
+<script>
+const $=s=>document.querySelector(s)||(PW&&PW.document.querySelector(s)),clamp=(v,a=-1,b=1)=>Math.max(a,Math.min(b,v));
+const REF={gold:4195,btc:84700},LNK={gold:[["X: oro en vivo","https://x.com/search?q=XAUUSD%20gold&f=live"],["TradingView: ideas XAUUSD","https://www.tradingview.com/symbols/XAUUSD/ideas/"],["TradingView: noticias","https://www.tradingview.com/symbols/XAUUSD/news/"]],btc:[["X: bitcoin en vivo","https://x.com/search?q=%24BTC%20bitcoin&f=live"],["TradingView: ideas BTCUSD","https://www.tradingview.com/symbols/BTCUSD/ideas/"],["Reddit r/Bitcoin","https://www.reddit.com/r/Bitcoin/"]]};
+const M={
+gold:{n:"GOLD",p:"XAU/USD",ico:"",
+ res:"Precio ≈ 4,170–4,225 (varía por fuente; el oro cierra el fin de semana); soportes 4,114 / 4,098 (nivel clave) / 4,030; resistencias 4,191 / 4,225 / 4,300; máx. histórico ≈ 5,600 (ene 2026); rendimiento del Tesoro 10 años >5.18%; el mercado ve riesgo de alza de la Fed en octubre.",
+ src:[["FXEmpire · señal diaria","Venta en diario (mejoró desde «venta fuerte»); bajo 4,200 apunta a 4,000, necesita recuperar 4,300",-1,3,"https://www.fxempire.com/forecasts/gold","Técnico","2026-10-02"],
+ ["FXEmpire · soportes","Rompió 4,225–28; aguanta 4,112; primer test de recuperación 4,190; apuestas de alza de 50 pb en octubre",-1,2,"https://www.fxempire.com/forecasts/article/gold-xau-usd-silver-price-forecast-oil-and-yields-pressure-metals-as-fed-turns-hawkish-1632938","Técnico","2026-09-29"],
+ ["FXStreet · diario","Vulnerable bajo las medias diarias; dólar en máximos de 3 meses y venta global de bonos",-1,2,"https://www.fxstreet.com/analysis/gold-price-forecast-xau-usd-eyes-worst-week-in-a-month-amid-hawkish-fed-outlook-202609250247","Técnico","2026-09-25"],
+ ["FX Leaders","Sesgo neutral con riesgo ligeramente alcista sobre 4,173; romper 4,191 mejora; bajo 4,173 presiona 4,123",0,2,"https://www.fxleaders.com/news/2026/10/02/gold-price-forecast-4191-resistance-nfp-fed-outlook/","Analistas","2026-10-02"],
+ ["FXEmpire · tras NFP","Empleo sept. +29k vs 84k esperado; el rebote falló bajo 4,230",-1,2,"https://fxempire.com/forecasts/article/gold-xauusd-price-forecast-weak-payrolls-bounce-fails-as-sellers-return-1634801","Técnico","2026-10-02"],
+ ["LiteFinance · Elliott","Compra si aguanta sobre 4,098.40 (objetivo 4,900+); si lo pierde, riesgo hacia 3,720",1,1,"https://litefinance.org/blog/analysts-opinions/gold-price-prediction-forecast/xauusd-elliott-wave-analysis-and-forecast-for-021026-091026","Técnico","2026-10-02"],
+ ["LiteFinance · traders minoristas","≈64% de los traders están en venta (a veces indicador contrario)",0,1,"https://www.litefinance.org/blog/analysts-opinions/gold-price-prediction-forecast/","Sentimiento","2026-10-01"],
+ ["LiteFinance · 4H","Rango 4,114–4,202 sin ruptura",0,2,"https://www.litefinance.org/blog/analysts-opinions/gold-price-prediction-forecast/daily-and-weekly/","Técnico","2026-10-02"],
+ ["TradingView (comunidad)","Mixto: canal bajista, compradores defienden 4,110–4,160",0,2,"https://www.tradingview.com/symbols/XAUUSD/","Foro","2026-10-02"],
+ ["Macro · PCE suave","Menos presión de alzas de la Fed",1,2,"https://www.fxempire.com/forecasts/article/gold-xau-usd-silver-price-forecast-softer-pce-cuts-fed-hike-bets-1634244","Macro","2026-09-30"],
+ ["World Gold Council","Bancos centrales +289 t en Q2 (+62% a/a): soporte estructural",1,2,"https://www.gold.org/goldhub/research/gold-demand-trends/gold-demand-trends-q2-2026/outlook","Institucional","2026-08-01"],
+ ["GoldSilver · flujos","ETF occidentales en salida; ≈298 t en pérdida actúan de techo",-1,2,"https://goldsilver.com/industry-news/goldsilver-news/gold-etf-outflows-central-bank-buying-divergence-2026/","Flujos","2026-09-15"]],
+ st:[["Bancos centrales (Q2)","+289 t",80,1],["ETF occidentales (Q2)","−45 t",30,-1],["Traders minoristas en venta","≈64%",64,0],["Rendimiento Tesoro 10a","> 5.18%",82,-1],["Nivel clave Elliott","4,098",50,0],["Distancia al máx. ≈5,600","−25%",75,0]]},
+btc:{n:"Bitcoin vs Dólar",p:"BTC/USD",ico:"₿",
+ res:"Precio ≈ 84,600–84,830 el 3 oct (rango 24 h 83,898–86,796; −2% en el día); soportes 82,871 / 82,281 / 81,731 (EMA 20) / 74,318 (EMA 200); resistencias 87,242 / 87,405 / 90,000; máx. histórico 126,080; Fear & Greed 67; rendimiento Tesoro 10a 5.28%.",
+ src:[["CoinLore · 3 oct","Pronóstico plano ≈84.7K; soporte 82,871, resistencia 87,242; Fear & Greed 67 (codicia)",0,2,"https://www.coinlore.com/coin/bitcoin/forecast/price-prediction","Técnico","2026-10-03"],
+ ["CryptoTicker · 3 oct","BTC cae ≈2% en 24 h; rendimientos 5.28%; correlación con acciones en mínimos desde 2015",-1,1,"https://cryptoticker.io/en/us-treasury-yields-bitcoin-decoupling","Macro","2026-10-03"],
+ ["Mercados de predicción (Kalshi)","54% de probabilidad de caer bajo 80K en octubre",-1,1,"https://robinhood.com/us/en/crypto/BTC/","Apuestas","2026-10-03"],
+ ["CoinDCX · estructura","Rompió el rango a la baja; objetivo oct. 87K si 82,281 aguanta; precio sobre EMA 20/100/200",0,3,"https://coindcx.com/blog/price-predictions/bitcoin-price-weekly/","Técnico","2026-09-30"],
+ ["Cryptopolitan · diario","Compradores empujan a 86K; soporte 84,374, resistencia 87,405",1,2,"https://www.cryptopolitan.com/bitcoin-price-prediction/","Técnico","2026-10-02"],
+ ["CoinStats · sentimiento","Cautelosamente alcista; consolidación constructiva",1,3,"https://coinstats.app/ai/a/latest-news-for-bitcoin","Sentimiento","2026-10-02"],
+ ["LiteFinance · indicadores","Venta en diario/semanal; Ichimoku semanal alcista",-1,2,"https://www.litefinance.org/blog/analysts-opinions/bitcoin-price-prediction-forecast/","Técnico","2026-10-01"],
+ ["Changelly · modelo","Deriva a ~80K en octubre (modelo automático, poco peso)",-1,1,"https://changelly.com/blog/bitcoin-price-prediction/","Modelo","2026-10-02"],
+ ["Polymarket","59.5% de tocar 90K en octubre (dato del 2 oct)",1,1,"https://news.bitcoin.com/price-predictions/bitcoin-price-prediction-polymarket-90k-october","Apuestas","2026-10-02"],
+ ["Santiment (X, Reddit, Telegram)","Ratio comentarios alcistas/bajistas de BTC: 1.37",1,2,"https://beincrypto.com/ethereum-xrp-sentiment-bearish-october","Redes","2026-10-01"],
+ ["The Block · ETF spot","Entradas sept. $2.7B; el 1 oct. +$102.7M",1,2,"https://theblock.co/news/markets/2026-10-02-spot-bitcoin-etfs-september-inflows-417547","Flujos","2026-10-02"]],
+ st:[["Fear & Greed","67 / 100",67,0],["Social alcista/bajista (Santiment)","1.37",62,1],["ETF spot sept.","+$2.7B",78,1],["Kalshi: cae bajo 80K en oct.","54%",54,-1],["Rendimiento Tesoro 10a","5.28%",85,-1],["Distancia al máx. 126,080","−33%",67,-1]]}};
+
+const TIPS=["Regla de oro: arriesga solo 1–2% de tu cuenta por operación. Así una mala racha no te saca del juego.","Antes de entrar, ten claro tu stop loss. Si no sabes dónde te equivocas, aún no es momento de operar.","Evita abrir operaciones justo antes de datos grandes (empleo, inflación, Fed): el spread se abre y el precio salta.","Una relación riesgo/beneficio de 1:1.5 o mejor te permite ganar aunque aciertes menos de la mitad de las veces.","No promedies pérdidas: si el precio va en contra, mejor respetar el stop que añadir más riesgo.","Si dos fuentes se contradicen, la respuesta honesta suele ser esperar. No operar también es una decisión.","Las velas de 1 minuto son ruido puro; mira también 15 min o 1 hora para ver la tendencia real.","Cuando todo el mundo está eufórico (índice de codicia alto) conviene reducir tamaño, no aumentarlo.","Apunta tus operaciones: lo que se mide se mejora. Revisa por qué ganaste o perdiste.","Con apalancamiento los movimientos se multiplican: baja el lote hasta que duerma tranquilo."];
+let cur,stream,imgEl,roi=null,cal=[],md=null,A=null,hist=[],sm=0,vd="",live=null,tab=0,LOG=[],Q=[],tok=0,voice=false,drag=null,calTmp=null,lastSay=0,ticks=0;
+const cv=$("#cv"),ctx=cv.getContext("2d",{willReadFrequently:true}),vid=document.createElement("video");vid.muted=true;vid.playsInline=true;
+const lab=b=>Math.abs(b)<.2?["ESPERAR","t-am"]:b>0?["COMPRAR","t-up"]:["VENDER","t-dn"];
+const vc=v=>v==="COMPRAR"?"up":v==="VENDER"?"dn":"am",esc=s=>String(s??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+/* ---------- Nubi ---------- */
+const MO={happy:"M92 108 Q105 124 118 108",sad:"M92 118 Q105 105 118 118",neutral:"M94 112 L116 112",think:"M99 112 a6 4.5 0 1 0 12 0 a6 4.5 0 1 0 -12 0",wow:"M95 106 Q105 130 115 106 Z"};
+function setMood(m){$("#nb").setAttribute("class","m-"+m);$("#mo").setAttribute("d",MO[m]);$("#mo").setAttribute("fill",m==="wow"||m==="think"?"#1b2650":"none")}
+function say(t,m,pr){if(m)setMood(m);LOG.push([new Date().toLocaleTimeString("es"),t]);if(LOG.length>80)LOG.shift();if(tab===3)tb(3);if(pr){Q=[];tok++}Q.push(t);lastSay=Date.now();if(!$("#tx").dataset.busy||pr)nx()}
+function nx(){const e=$("#tx");if(!Q.length){e.dataset.busy="";return}e.dataset.busy="1";const t=Q.shift(),my=++tok;let i=0;e.textContent="";if(voice)speak(t);
+ (function s(){if(my!==tok)return;i+=2;e.textContent=t.slice(0,i);if(i<t.length)setTimeout(s,18);else setTimeout(()=>{if(my===tok)nx()},Math.min(5000,1300+t.length*22))})()}
+function speak(t){try{speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(t.replace(/[]/g,""));u.lang="es-ES";u.rate=1.05;u.pitch=1.3;speechSynthesis.speak(u)}catch(e){}}
+function togVoice(){voice=!voice;$("#vb").textContent=voice?"Voz on":"Voz off";if(voice)speak("¡Hola! Ya puedes oírme.");else try{speechSynthesis.cancel()}catch(e){}}
+function place(id){$(id).appendChild($("#nubi"))}
+/* ---------- navegación ---------- */
+$("#mc").innerHTML=Object.keys(M).map(k=>{const b=bias(k),l=lab(b);return`<button class="card mk" onclick="openM('${k}')"><small>${M[k].p}</small><h3 style="font-size:21px;margin:0">${M[k].ico} ${M[k].n}</h3><p class="mu" style="margin:6px 0">${M[k].src.length} fuentes investigadas</p><span class="tag ${l[1]}">Sesgo de fuentes: ${l[0]}</span> <small>(${b.toFixed(2)})</small><p style="margin:8px 0 0;color:var(--ac)">Elegir este mercado →</p></button>`}).join("");
+function openM(k){cur=k;A=null;hist=[];sm=0;vd="";$("#home").classList.add("hide");$("#mv").classList.remove("hide");place("#nm");$("#mt").textContent=M[k].ico+" "+M[k].p+" · "+M[k].n;
+ $("#tabs").innerHTML=["Lectura en vivo","Fuentes y foros","Datos del mercado","Conversación con Nubi"].map((t,i)=>`<button class="btn ${i?'':'on'}" onclick="tb(${i})">${t}</button>`).join("");tb(0);scrollTo(0,0);
+ const m=M[k],B=m.src.filter(s=>s[2]>0).length,S=m.src.filter(s=>s[2]<0).length,b=bias(k),l=lab(b)[0];
+ say(`¡Elegiste ${m.n}! Ya revisé ${m.src.length} fuentes: ${B} apuntan a compra, ${S} a venta y el resto está neutral. El sesgo de la investigación es ${b.toFixed(2)} (${l==="ESPERAR"?"sin ventaja clara":l==="COMPRAR"?"inclinado a comprar":"inclinado a vender"}).`,"happy",1);
+ say("Ahora comparte tu pantalla con el gráfico de XM (botón morado) o sube una captura. ¡Yo me encargo de leer las velas!")}
+function back(){stopShare();place("#nh");$("#mv").classList.add("hide");$("#home").classList.remove("hide");say("¡Vuelve cuando quieras! Elige otro mercado y lo analizamos.","happy",1)}
+function tb(i){tab=i;[...$("#tabs").children].forEach((b,j)=>b.classList.toggle("on",i===j));const m=M[cur];let h="";
+ if(i===0)h='<div id="lv"><small>Cuando comparta tu gráfico aquí aparecerán mis métricas en vivo.</small></div>';
+ if(i===1){const B=m.src.filter(s=>s[2]>0).length,S=m.src.filter(s=>s[2]<0).length,N=m.src.length-B-S,L=m.src.length;
+  h=`<small>${L} fuentes · <span class="up">${B} compra</span> · <span class="dn">${S} venta</span> · <span class="am">${N} neutral</span></small><div class="stk"><i style="width:${B/L*100}%;background:var(--up)"></i><i style="width:${N/L*100}%;background:var(--am)"></i><i style="width:${S/L*100}%;background:var(--dn)"></i></div><div class="sc"><table><tr><th>Fuente</th><th>Tipo</th><th>Lectura</th><th>Señal</th><th>Peso</th></tr>${m.src.map(s=>`<tr><td><a href="${s[4]}" target="_blank" rel="noopener">${s[0]}</a></td><td>${s[5]}</td><td>${s[1]}</td><td class="${s[2]>0?'up':s[2]<0?'dn':'am'}"><b>${s[2]>0?'COMPRA':s[2]<0?'VENTA':'NEUTRAL'}</b></td><td>${s[3]}</td></tr>`).join("")}</table></div><small>X, FOMO y foros con login no son accesibles; lo de redes viene de agregadores citados (Santiment, Fear & Greed). Investigado el 2 oct 2026.</small>`}
+ if(i===2)h=m.st.map(s=>`<div style="display:flex;justify-content:space-between"><span>${s[0]}</span><b class="${s[3]>0?'up':s[3]<0?'dn':'am'}">${s[1]}</b></div><div class="bar"><i style="width:${s[2]}%;background:var(--${s[3]>0?'up':s[3]<0?'dn':'am'})"></i></div>`).join("")+`<p class="mu">${esc(m.res)}</p>`;
+ if(i===3)h=`<div class="chat">${LOG.slice().reverse().map(l=>`<p><small>${l[0]}</small>${esc(l[1])}</p>`).join("")}</div>`;
+ $("#tb").innerHTML=h;if(i===0&&A)liveTab()}
+/* ---------- captura ---------- */
+async function share(){try{stream=await navigator.mediaDevices.getDisplayMedia({video:true,audio:false});imgEl=null;vid.srcObject=stream;await vid.play();stream.getVideoTracks()[0].onended=()=>stopShare();$("#bx").disabled=false;
+  say("¡Ya veo tu pantalla!  Abre el gráfico de XM en la ventana que compartiste. Luego pulsa «Marcar zona de velas» y arrastra un recuadro sobre las velas (sin textos ni el eje de precios).","wow",1);
+  clearInterval(live);live=setInterval(tick,2000);tick()}
+ catch(e){$("#fb").classList.remove("hide");$("#sm").innerHTML='<span class="dn">No se pudo compartir pantalla (el navegador lo bloquea aquí o lo cancelaste). Abre la página en pestaña nueva o usa «Subir captura».</span>';say("Mmm, el navegador no me dejó ver tu pantalla. Ábreme en una pestaña propia o sube una captura y listo.","sad",1)}}
+function stopShare(){clearInterval(live);live=null;if(stream){stream.getTracks().forEach(t=>t.stop());stream=null}$("#bx").disabled=true;if(cur&&A)say("Dejé de ver tu pantalla. Mi último análisis queda en pantalla; compártela de nuevo para seguir.","neutral")}
+function file(f){if(!f)return;const im=new Image();im.onload=()=>{imgEl=im;if(stream)stopShare();say("¡Recibí tu captura!  Marca la zona de velas arrastrando un recuadro y la analizo.","happy",1);tick()};im.src=URL.createObjectURL(f)}
+addEventListener("paste",e=>{const it=[...(e.clipboardData?.items||[])].find(i=>i.type.startsWith("image/"));if(it&&cur)file(it.getAsFile())});
+function grab(){let s,w,h;if(stream&&vid.videoWidth){s=vid;w=vid.videoWidth;h=vid.videoHeight}else if(imgEl){s=imgEl;w=imgEl.naturalWidth;h=imgEl.naturalHeight}else return false;
+ const k=Math.min(1,1400/w),W=Math.round(w*k),H=Math.round(h*k);if(cv.width!==W||cv.height!==H){cv.width=W;cv.height=H}ctx.drawImage(s,0,0,W,H);$("#ph").classList.add("hide");cv.classList.remove("hide");return true}
+/* ---------- calibración y zona ---------- */
+function mode(m){md=md===m?null:m;$("#br").classList.toggle("on",md==="roi");$("#bc").classList.toggle("on",md==="cal");cv.style.cursor=md?"crosshair":"default";
+ if(md==="roi")say("Arrastra un recuadro sobre las velas. Incluye solo la zona del gráfico, sin el eje de precios ni los textos de arriba.","think",1);
+ if(md==="cal"){cal=[];calTmp=null;say("Para darte precios exactos: haz clic sobre una línea o etiqueta del eje de precios y escribe su valor. Luego repite con otra distinta, lo más separada posible.","think",1)}}
+function resetCal(){cal=[];roi=null;calTmp=null;md=null;$("#calrow").classList.add("hide");mode(null);redraw();say("Listo, reinicié la zona y la calibración.","neutral",1)}
+function pt(e){const r=cv.getBoundingClientRect();return{x:clamp((e.clientX-r.left)/r.width,0,1),y:clamp((e.clientY-r.top)/r.height,0,1)}}
+cv.addEventListener("pointerdown",e=>{if(!md)return;const p=pt(e);if(md==="roi"){drag=p;roi={x0:p.x,y0:p.y,x1:p.x,y1:p.y};cv.setPointerCapture(e.pointerId)}
+ else{calTmp=p;$("#calrow").classList.remove("hide");$("#calt").textContent="Punto "+(cal.length+1)+"/2 · precio de ese punto:";$("#calv").value="";$("#calv").focus();redraw()}});
+cv.addEventListener("pointermove",e=>{if(!drag)return;const p=pt(e);roi={x0:Math.min(drag.x,p.x),y0:Math.min(drag.y,p.y),x1:Math.max(drag.x,p.x),y1:Math.max(drag.y,p.y)};redraw()});
+cv.addEventListener("pointerup",()=>{if(!drag)return;drag=null;if(roi.x1-roi.x0<.05||roi.y1-roi.y0<.05){roi=null;redraw();return}mode(null);say("¡Zona marcada!  Ahora solo miraré ahí. Para ver precios exactos, pulsa «Calibrar precios».","happy",1);tick()});
+function calOk(){const v=parseFloat($("#calv").value);if(!calTmp||isNaN(v))return;cal.push({f:calTmp.y,p:v});calTmp=null;$("#calrow").classList.add("hide");
+ if(cal.length>=2){if(Math.abs(cal[0].f-cal[1].f)<.05){cal.pop();say("Esos dos puntos están muy juntos. Elige otro más separado verticalmente.","think",1);return}mode(null);say(`¡Calibrado!  Ahora hablo en precios reales: ${cal[0].p} y ${cal[1].p} son mis referencias.`,"happy",1);tick()}else{$("#calt").textContent="";say("Perfecto, uno listo. Ahora marca un segundo punto del eje, bien separado del primero.","happy",1)}redraw()}
+const calibrated=()=>cal.length>=2&&Math.abs(cal[1].f-cal[0].f)>.04;
+function V(yA){const H=cv.height;if(!calibrated())return 100*(1-yA/H);const[a,b]=cal;return a.p+(yA/H-a.f)*(b.p-a.p)/(b.f-a.f)}
+function Y(v){const H=cv.height;if(!calibrated())return H*(1-v/100);const[a,b]=cal;return H*(a.f+(v-a.p)*(b.f-a.f)/(b.p-a.p))}
+const fp=v=>calibrated()?v.toLocaleString("en-US",{minimumFractionDigits:2,maximumFractionDigits:2}):"(línea en gráfico)";
+/* ---------- extracción de velas ---------- */
+function extract(){const W=cv.width,H=cv.height,R=roi||AR||{x0:.02,y0:.02,x1:.98,y1:.98};
+ const x0=Math.floor(R.x0*W),y0=Math.floor(R.y0*H),w=Math.ceil(R.x1*W)-x0,h=Math.ceil(R.y1*H)-y0;if(w<30||h<30)return null;
+ const d=ctx.getImageData(x0,y0,w,h).data,c=new Uint8Array(w*h);
+ for(let p=0;p<w*h;p++){const r=d[p*4],g=d[p*4+1],b=d[p*4+2],mx=Math.max(r,g,b),mn=Math.min(r,g,b);if(mx<90||(mx-mn)/mx<.35)continue;
+  if(g>=r&&g>=b&&g-r>25)c[p]=1;else if(r>=g&&r>=b&&r-g>60&&r-b>25)c[p]=2}
+ for(let j=0;j<h;j++){let i=0;while(i<w){const v=c[j*w+i];if(v){let k=i;while(k<w&&c[j*w+k]===v)k++;if(k-i>18)for(let t=i;t<k;t++)c[j*w+t]=0;i=k}else i++}}
+ const cols=[];for(let i=0;i<w;i++){let best=null,s=-1,l=-1;for(let j=0;j<h;j++){if(c[j*w+i]){if(s<0)s=j;else if(j-l>3){if(!best||l-s>best[1]-best[0])best=[s,l];s=j}l=j}}
+  if(s>=0&&(!best||l-s>best[1]-best[0]))best=[s,l];if(!best||best[1]-best[0]<1){cols.push(null);continue}let g=0,r=0;for(let j=best[0];j<=best[1];j++){c[j*w+i]===1?g++:c[j*w+i]===2&&r++}cols.push({k:g>=r?1:2,a:best[0],b:best[1],i})}
+ let runs=[],cu=null;for(const q of cols){if(!q){if(cu){runs.push(cu);cu=null}continue}if(cu&&cu.k!==q.k){runs.push(cu);cu=null}if(!cu)cu={k:q.k,cs:[]};cu.cs.push(q)}if(cu)runs.push(cu);
+ const med=a=>{const s=[...a].sort((x,y)=>x-y);return s[Math.floor(s.length/2)]||0},mw=med(runs.map(r=>r.cs.length));
+ const parts=[];for(const r of runs){const n=r.cs.length;if(mw>=3&&n>mw*2.4){const k=Math.round(n/mw),sz=n/k;for(let t=0;t<k;t++)parts.push({k:r.k,cs:r.cs.slice(Math.round(t*sz),Math.round((t+1)*sz))})}else parts.push(r)}
+ let cs=parts.filter(r=>r.cs.length>=1).map(r=>{const hi=Math.min(...r.cs.map(q=>q.a)),lo=Math.max(...r.cs.map(q=>q.b)),wd=r.cs.length;let bt=hi,bb=lo;if(wd>=3){bt=r.cs[0].a;bb=r.cs[0].b}
+  const up=r.k===1,ay=n=>y0+n,x=x0+(r.cs[0].i+r.cs[wd-1].i)/2;
+  return{x,up,h:V(ay(hi)),l:V(ay(lo)),o:V(ay(up?bb:bt)),c:V(ay(up?bt:bb)),yc:ay(up?bt:bb),yh:ay(hi),yl:ay(lo),wd}});
+ const cyM=med(cs.map(c=>(c.yh+c.yl)/2));cs=cs.filter(c=>!((c.yl-c.yh)<h*.1&&Math.abs((c.yh+c.yl)/2-cyM)>h*.45));
+ return{cs,x0,y0,w,h}}
+/* ---------- análisis ---------- */
+function ema(a,n){const k=2/(n+1);let e=a[0];return a.map(v=>e=v*k+e*(1-k))}
+function analyze(E){const cs=E.cs,n=cs.length;if(n<8)return{ok:false,n};const cl=cs.map(c=>c.c),hi=cs.map(c=>c.h),lo=cs.map(c=>c.l),last=cl[n-1];
+ const atr=Math.max(1e-9,cs.slice(-14).reduce((a,c)=>a+(c.h-c.l),0)/Math.min(14,n)),p1=n>=24?9:5,p2=n>=24?21:12,e1=ema(cl,p1),e2=ema(cl,p2);
+ const tr=clamp((e1[n-1]-e2[n-1])/(atr*1.2)),L=Math.min(n,30);let sx=0,sy=0,sxy=0,sxx=0;for(let i=0;i<L;i++){const y=cl[n-L+i];sx+=i;sy+=y;sxy+=i*y;sxx+=i*i}
+ const rng=Math.max(...hi.slice(-L))-Math.min(...lo.slice(-L))||1,sl=clamp(((L*sxy-sx*sy)/(L*sxx-sx*sx||1))*L/rng*1.6);
+ const pr=Math.min(14,n-1);let g=0,ls=0;for(let i=n-pr;i<n;i++){const d=cl[i]-cl[i-1];d>0?g+=d:ls-=d}const rsi=ls===0?100:100-100/(1+g/ls),rs=rsi>72?-.6:rsi<28?.6:(rsi-50)/40*.7;
+ const k=Math.min(10,n-1),mo=clamp((last-cl[n-1-k])/(atr*4)),a=cs[n-1],p=cs[n-2],bl=Math.abs(a.c-a.o),bp=Math.abs(p.c-p.o),uw=a.h-Math.max(a.o,a.c),lw=Math.min(a.o,a.c)-a.l;
+ const eb=p.c<p.o&&a.c>a.o&&a.c>=p.o&&a.o<=p.c&&bl>bp,es=p.c>p.o&&a.c<a.o&&a.c<=p.o&&a.o>=p.c&&bl>bp,ha=bl>0&&lw>2*bl&&uw<bl,st=bl>0&&uw>2*bl&&lw<bl;
+ const b8=cs.slice(-8).filter(c=>c.c>c.o).length,pat=clamp((eb?.6:es?-.6:0)+(ha?.35:0)-(st?-.35:0)*-1+(b8/8-.5)*.9);
+ const pn=eb?"Envolvente alcista":es?"Envolvente bajista":ha?"Martillo (rechazo de bajadas)":st?"Estrella fugaz (rechazo de subidas)":"Sin patrón claro";
+ const tech=clamp(.3*tr+.2*sl+.2*rs+.15*mo+.15*pat),bi=bias(cur),fin=.6*tech+.4*bi;
+ const sw=(arr,f)=>{const o=[];for(let i=2;i<n-2;i++){let ok=true;for(let j=i-2;j<=i+2;j++)if(j!==i&&(f?arr[j]>arr[i]:arr[j]<arr[i]))ok=false;if(ok)o.push(arr[i])}return o};
+ const cluster=a=>{const o=[];a.forEach(v=>{const q=o.find(x=>Math.abs(x-v)<atr*.5);if(!q)o.push(v)});return o};
+ let S=cluster(sw(lo,0).filter(v=>v<last-atr*.2).sort((x,y)=>y-x)).slice(0,3),Rr=cluster(sw(hi,1).filter(v=>v>last+atr*.2).sort((x,y)=>x-y)).slice(0,3);
+ if(!S.length)S=[Math.min(...lo)];if(!Rr.length)Rr=[Math.max(...hi)];
+ const pos=(last-Math.min(...lo))/(Math.max(...hi)-Math.min(...lo)||1);
+ return{ok:true,n,cl,e1,e2,p1,p2,atr,last,tr,sl,rs,mo,pat,rsi,pn,tech,bi,fin,S,R:Rr,pos,b8,eb,es,ha,st}}
+function plan(A,v){const{last,atr,S,R}=A;if(v==="ESPERAR")return{up:R[0]+atr*.2,dn:S[0]-atr*.2};const s=v==="COMPRAR"?1:-1,sup=s>0?S[0]:R[0];let stop=Math.abs(last-sup)>=.8*atr&&Math.abs(last-sup)<=3.2*atr?sup-s*.25*atr:last-s*1.6*atr;const risk=Math.abs(last-stop);
+ return{entry:last,stop,tp1:last+s*1.5*risk,tp2:last+s*2.5*risk,rr:"1 : 1.5 / 1 : 2.5"}}
+function tick(){if(!cur||!grab()){return}const E=extract();A=E?analyze(E):null;ticks++;if(A&&A.ok){sm=ticks<=1?A.fin:sm*.6+A.fin*.4;hist.push(sm);if(hist.length>150)hist.shift();const a=Math.abs(sm);let nv=vd||"ESPERAR";
+  if(!vd)nv=a<.24?"ESPERAR":sm>0?"COMPRAR":"VENDER";else if(vd==="ESPERAR"){if(a>=.24)nv=sm>0?"COMPRAR":"VENDER"}else if(vd==="COMPRAR"){if(sm<.16)nv=sm<-.24?"VENDER":"ESPERAR"}else if(sm>-.16)nv=sm>.24?"COMPRAR":"ESPERAR";
+  const ch=nv!==vd;const prev=vd;vd=nv;A.v=vd;A.pl=plan(A,vd);paint();if(ch)announce(prev);else periodic()}
+ else{paint();if(ticks%5===1)say(A?`Solo detecto ${A.n} velas y necesito al menos 8. Marca bien la zona de velas (sin textos ni eje) y que se vean verdes y rojas.`:"No logro leer la zona. Marca un recuadro más grande sobre las velas.","think")}}
+function announce(prev){const a=A,m=M[cur],v=vd,cal_=calibrated(),pl=a.pl,pf=x=>cal_?fp(x):"la línea del gráfico";
+ const st=a.tr>.25?"la media rápida está claramente sobre la lenta (tendencia alcista)":a.tr<-.25?"la media rápida está bajo la lenta (tendencia bajista)":"las medias están enredadas (sin tendencia clara)";
+ const ex=`Leí ${a.n} velas. Veo que ${st}, el RSI marca ${a.rsi.toFixed(0)} y el patrón de la última vela es: ${a.pn.toLowerCase()}.`;
+ const dos=`La investigación tiene un sesgo de ${a.bi.toFixed(2)}, ${Math.sign(a.bi)===Math.sign(a.tech)||Math.abs(a.bi)<.15?"que va en la misma dirección que el gráfico":"que contradice un poco al gráfico, así que bajo la confianza"}.`;
+ if(v==="COMPRAR"){say(`¡Atención! Mi veredicto ahora es COMPRAR . ${ex}`,"happy",1);say(dos);say(`Plan: entrada cerca de ${pf(pl.entry)}, stop loss en ${pf(pl.stop)} y objetivos en ${pf(pl.tp1)} y ${pf(pl.tp2)}. Si el precio cae bajo el stop, la idea falló: se sale sin discutir.`)}
+ else if(v==="VENDER"){say(`Mi veredicto ahora es VENDER . ${ex}`,"sad",1);say(dos);say(`Plan: entrada cerca de ${pf(pl.entry)}, stop loss en ${pf(pl.stop)} y objetivos en ${pf(pl.tp1)} y ${pf(pl.tp2)}. Recuerda que vender en CFD es apostar a que baja; el stop te protege si sube.`)}
+ else{say(`Por ahora lo más sano es ESPERAR . ${ex}`,"think",1);say(dos);say(`Una compra tendría más sentido si el precio rompe y se sostiene sobre ${pf(pl.up)}; una venta, si cae bajo ${pf(pl.dn)}. Mientras tanto, paciencia: no operar también es ganar.`)}
+ if(!cal_)say("Consejo: si pulsas «Calibrar precios» te doy entrada, stop y objetivos con números exactos en vez de líneas en el gráfico.")}
+function periodic(){if(Date.now()-lastSay<28000||Q.length||!A)return;const r=Math.random(),a=A;
+ if(r<.5)say(`Sigo vigilando ${M[cur].p}: veredicto ${vd}, RSI ${a.rsi.toFixed(0)}, ${a.n} velas leídas. Sin cambios importantes por ahora.`,vd==="COMPRAR"?"happy":vd==="VENDER"?"sad":"neutral");
+ else say(TIPS[Math.floor(Math.random()*TIPS.length)],"happy");
+ if(a.rsi>72)say("[!] El RSI está muy alto (sobrecompra): el precio podría frenar o corregir pronto.");if(a.rsi<28)say("[!] El RSI está muy bajo (sobreventa): ojo, podría rebotar.")}
+/* ---------- dibujo ---------- */
+function redraw(){if(cur&&grab())overlay()}
+function paint(){overlay();$("#rs").innerHTML=A&&A.ok?verdict():`<small>No logro leer suficientes velas. Marca la zona de velas con « Marcar zona».</small>`;if(tab===0)liveTab()}
+function overlay(){const W=cv.width,H=cv.height;ctx.save();ctx.lineWidth=Math.max(1,W/900);ctx.font=Math.round(W/70)+"px system-ui";
+ if(roi){ctx.setLineDash([6,4]);ctx.strokeStyle="#b44dff";ctx.strokeRect(roi.x0*W,roi.y0*H,(roi.x1-roi.x0)*W,(roi.y1-roi.y0)*H);ctx.setLineDash([]);ctx.fillStyle="#b44dff";ctx.fillText("zona analizada",roi.x0*W+4,roi.y0*H-4)}
+ cal.forEach((c,i)=>{ctx.fillStyle="#f2b84b";ctx.fillRect(0,c.f*H-1,W*.04,3);ctx.fillText(c.p,W*.045,c.f*H+4)});if(calTmp){ctx.fillStyle="#f2b84b";ctx.fillRect(0,calTmp.y*H-1,W*.04,3)}
+ if(A&&A.ok&&A.cl){const E=A.E;const cx=A.cx,line=(arr,col)=>{ctx.beginPath();ctx.strokeStyle=col;arr.forEach((v,i)=>{i?ctx.lineTo(cx[i],Y(v)):ctx.moveTo(cx[i],Y(v))});ctx.stroke()};line(A.e1,"#f2b84b");line(A.e2,"#3d8bff");
+  const x0=(roi?roi.x0:.02)*W,x1=(roi?roi.x1:.98)*W,hl=(v,col,t,d)=>{ctx.setLineDash(d?[5,4]:[]);ctx.strokeStyle=col;ctx.beginPath();ctx.moveTo(x0,Y(v));ctx.lineTo(x1,Y(v));ctx.stroke();ctx.setLineDash([]);ctx.fillStyle=col;ctx.fillText(t+(calibrated()?" "+fp(v):""),x0+4,Y(v)-3)};
+  A.S.slice(0,2).forEach((v,i)=>hl(v,"#22d17f","S"+(i+1),1));A.R.slice(0,2).forEach((v,i)=>hl(v,"#ff5a5f","R"+(i+1),1));
+  const p=A.pl;if(p&&p.entry!==undefined){hl(p.entry,"#b44dff","Entrada");hl(p.stop,"#ff5a5f","Stop");hl(p.tp1,"#22d17f","TP1");hl(p.tp2,"#22d17f","TP2")}
+  A.cs.forEach(c=>{ctx.fillStyle="#ffffffaa";ctx.beginPath();ctx.arc(c.x,Y(c.c),Math.max(1.5,W/700),0,7);ctx.fill()})}
+ ctx.restore()}
+function verdict(){const a=A,v=vd,c=Math.round(clamp(35+60*Math.abs(sm)-(Math.sign(a.bi)!==Math.sign(a.tech)&&Math.abs(a.bi)>.15?15:0)-(a.n<20?10:0),10,90)),p=a.pl,col=v==="COMPRAR"?"up":v==="VENDER"?"dn":"am",f=x=>calibrated()?fp(x):"ver línea";
+ const plan_=v==="ESPERAR"?`<div class="kv"><span>Compra si rompe</span><b class="up">${f(p.up)}</b><span>Venta si cae bajo</span><b class="dn">${f(p.dn)}</b></div>`:`<div class="kv"><span>Entrada</span><b>${f(p.entry)}</b><span>Stop loss</span><b class="dn">${f(p.stop)}</b><span>Objetivo 1</span><b class="up">${f(p.tp1)}</b><span>Objetivo 2</span><b class="up">${f(p.tp2)}</b><span>Riesgo/beneficio</span><b>${p.rr}</b></div>`;
+ return`<div class="big ${col}">${v}</div><small>Confianza ${c}% · ${new Date().toLocaleTimeString("es")} · se actualiza en vivo</small><div class="bar" style="margin-top:6px"><i style="width:${c}%;background:var(--${col})"></i></div>${plan_}${calibrated()?"":'<small class="am">Calibra precios para ver números exactos.</small>'}`}
+function cbar(l,v){const w=Math.abs(v)*50;return`<div style="display:flex;justify-content:space-between"><small>${l}</small><small class="${v>=0?'up':'dn'}">${v.toFixed(2)}</small></div><div class="cb"><i style="left:${v>=0?50:50-w}%;width:${w}%;background:var(--${v>=0?'up':'dn'})"></i></div>`}
+function liveTab(){const a=A,el=$("#lv");if(!el)return;if(!a||!a.ok){el.innerHTML="<small>Aún no leo suficientes velas.</small>";return}
+ el.innerHTML=`<div class="g" style="margin:0"><div><h3>Qué estoy leyendo</h3><div class="kv"><span>Velas detectadas</span><b>${a.n}</b><span>EMA ${a.p1} / ${a.p2}</span><b class="${a.tr>=0?'up':'dn'}">${a.tr>=0?"alcista":"bajista"}</b><span>RSI</span><b class="${a.rsi>70?'dn':a.rsi<30?'up':''}">${a.rsi.toFixed(1)}</b><span>Última vela</span><b>${a.pn}</b><span>Velas verdes (últ. 8)</span><b>${a.b8}/8</b><span>Posición en el rango</span><b>${Math.round(a.pos*100)}%</b><span>Soportes</span><b class="up">${a.S.map(v=>calibrated()?fp(v):"●").join(" · ")}</b><span>Resistencias</span><b class="dn">${a.R.map(v=>calibrated()?fp(v):"●").join(" · ")}</b></div>
+ <h3>Evolución de la señal</h3><canvas id="sp" height="70" style="width:100%"></canvas></div>
+ <div><h3>Cómo se forma la puntuación</h3>${cbar("Tendencia (EMAs)",a.tr)}${cbar("Pendiente",a.sl)}${cbar("RSI",a.rs)}${cbar("Momentum",a.mo)}${cbar("Velas / patrón",a.pat)}<hr style="border:0;border-top:1px solid var(--bd)">${cbar("Técnico (60%)",a.tech)}${cbar("Dossier de fuentes (40%)",a.bi)}${cbar("TOTAL",a.fin)}</div></div>`;
+ const s=$("#sp");if(s){const W=s.clientWidth,H=70;s.width=W;const x=s.getContext("2d");x.strokeStyle="#8d9bb8";x.beginPath();x.moveTo(0,H/2);x.lineTo(W,H/2);x.stroke();x.strokeStyle="#b44dff";x.lineWidth=2;x.beginPath();hist.forEach((v,i)=>{const px=i/Math.max(1,hist.length-1)*W,py=H/2-v*H/2*.9;i?x.lineTo(px,py):x.moveTo(px,py)});x.stroke()}}
+/* extend analyze to keep x positions */
+const _an=analyze;analyze=function(E){const r=_an(E);if(r.ok){r.cx=E.cs.map(c=>c.x);r.cs=E.cs}return r};
+/* ===== v5: asistente, 2 pantallas, voces, 50/50, herramientas ===== */
+var s2=null,smp=null,VO=[],valid=0,need=20,hold=0,cand="",waitUntil=0,lastSnap=0,lastReact=0,lastAct=Date.now(),snd=true,hf=false,listening=false,rec=null,VS=[],VP=1.3,VR=1.05,lastAns="",bc=null,clipOn=false,clipLast="",CK={},talking=false,mood="happy",vsel=0;
+function dec(s){return Math.pow(.5,Math.max(0,(Date.now()-Date.parse(s[6]+"T12:00:00Z"))/864e5)/(/Institucional|Flujos|Macro/.test(s[5])?14:2))}
+function bias(k){let a=0,b=0;M[k].src.forEach(s=>{const w=s[3]*dec(s);a+=s[2]*w;b+=w});return b?a/b:0}
+function fresh(k){const S=M[k].src;return S.reduce((a,s)=>a+dec(s)*s[3],0)/S.reduce((a,s)=>a+s[3],0)}
+function isClosed(k){if(k!=="gold")return false;const d=new Date(),w=d.getUTCDay(),h=d.getUTCHours();return w===6||(w===5&&h>=21)||(w===0&&h<22)}
+function mhUpdate(){const c=cur&&isClosed(cur);$("#mh").classList.toggle("hide",!c);chips()}
+/* ---- Nubi: caras ---- */
+const EY={n:'<rect class="eye" x="-9" y="-14" width="18" height="28" rx="9"/>',h:'<path d="M-12 6Q0-14 12 6" class="st"/>',s:'<path d="M-12-4Q0 12 12-4" class="st"/>',w:'<circle r="14"/><circle r="5" fill="#0a1126"/>',z:'<path d="M-12 2H12" class="st"/>',l:'<path d="M0 12C-20-2-11-18 0-7C11-18 20-2 0 12Z" fill="#ff6fa8"/>',a:'<rect x="-9" y="-8" width="18" height="22" rx="8"/><path d="M-14-13L12-6" class="st"/>',t:'<rect class="eye" x="-9" y="-14" width="18" height="28" rx="9" transform="translate(6 -6)"/>'};
+const MM={n:"M-9 28H9",h:"M-14 26Q0 42 14 26",s:"M-12 36Q0 24 12 36",w:"M-6 28a6 7 0 1 0 12 0a6 7 0 1 0 -12 0",z:"M-5 30H5",l:"M-14 24Q0 44 14 24",a:"M-12 34Q0 26 12 34",t:"M-7 30H7"};
+const CODE={happy:"h",sad:"s",neutral:"n",think:"t",wow:"w",love:"l",alert:"a",sleep:"z",scan:"n",listen:"w"};
+function setMood(m){const c=CODE[m]||"n";mood=m;$("#nb").setAttribute("class",(talking?"talk ":"")+(m==="scan"?"scn ":"")+"m-"+c);$("#eyes").innerHTML=`<g transform="translate(-34 0)">${EY[c]}</g><g transform="translate(34 0) scale(-1 1)">${EY[c]}</g>`;$("#mo").setAttribute("d",MM[c]);$("#mo").setAttribute("fill",c==="w"?"#5ef0ff":"none")}
+function setTalk(b){talking=b;$("#nb").classList.toggle("talk",b)}
+function ant(){$("#ant").setAttribute("fill",vd==="COMPRAR"?"#22d17f":vd==="VENDER"?"#ff5a5f":valid<need?"#3d8bff":"#f2b84b")}
+addEventListener("pointerdown",()=>{if(mood==="sleep"){say("¡Ah! Me quedé dormida soñando con velas verdes… ya estoy aquí. ","wow",1)}lastAct=Date.now()});
+setInterval(()=>{if(Date.now()-lastAct>90000&&mood!=="sleep"&&!Q.length&&!talking&&!listening)setMood("sleep")},5000);
+/* ---- diálogo y voz ---- */
+function say(t,m,pr){if(m)setMood(m);LOG.push([new Date().toLocaleTimeString("es"),t]);if(LOG.length>120)LOG.shift();if(tab===6)tb(6);if(pr){Q=[];tok++;try{speechSynthesis.cancel()}catch(e){}}Q.push(t);lastSay=lastAct=Date.now();if(!$("#tx").dataset.busy||pr)nx()}
+function nx(){const e=$("#tx");if(!Q.length){e.dataset.busy="";setTalk(false);return}e.dataset.busy="1";const t=Q.shift(),my=++tok;let i=0;e.textContent="";setTalk(true);if(voice)speak(t);
+ (function s(){if(my!==tok)return;i+=2;e.textContent=t.slice(0,i);if(i<t.length)setTimeout(s,18);else setTimeout(()=>{if(my===tok)nx()},voice?Math.max(1200,t.length*58):Math.min(5000,1300+t.length*22))})()}
+function loadV(){try{VS=speechSynthesis.getVoices().filter(v=>/^es/i.test(v.lang));const p=VS.findIndex(v=>/google espa|paulina|helena|sabina|monica|mónica|dalia|elena|female|natural/i.test(v.name));vsel=Math.max(0,p)}catch(e){}}
+try{speechSynthesis.onvoiceschanged=loadV;loadV()}catch(e){}
+function speak(t){try{const u=new SpeechSynthesisUtterance(t.replace(/[\u{1F300}-\u{1FAFF}\u2600-\u27BF\uFE0F]/gu,""));const v=VS[vsel];if(v){u.voice=v;u.lang=v.lang}else u.lang="es-ES";u.pitch=VP;u.rate=VR;u.onend=()=>{if(hf&&!Q.length&&!listening)setTimeout(mic,400)};speechSynthesis.speak(u)}catch(e){}}
+function togVoice(){voice=!voice;$("#vb").textContent=voice?"Voz on":"Voz off";if(voice)speak("¡Hola! Ya puedes oírme.");else try{speechSynthesis.cancel()}catch(e){}}
+function mic(){const SR=window.SpeechRecognition||window.webkitSpeechRecognition;if(!SR){say("Tu navegador no tiene reconocimiento de voz (usa Chrome o Edge). Mientras tanto, escríbeme en la cajita. ","sad",1);return}
+ if(listening){try{rec.stop()}catch(e){}return}
+ if(!voice){voice=true;$("#vb").textContent="Voz on"}try{speechSynthesis.cancel()}catch(e){}
+ rec=new SR();rec.lang="es-ES";rec.interimResults=true;rec.continuous=false;
+ rec.onstart=()=>{listening=true;$("#mb").textContent=" Escuchando…";$("#mb").classList.add("on");setMood("listen")};
+ rec.onresult=e=>{const t=[...e.results].map(r=>r[0].transcript).join(" ");$("#heard").textContent=" "+t;if(e.results[e.results.length-1].isFinal){$("#heard").textContent="";ask(t)}};
+ rec.onerror=e=>{listening=false;say(e.error==="not-allowed"||e.error==="service-not-allowed"?"No tengo permiso para usar el micrófono. Actívalo en el candado de la barra de direcciones o escríbeme.":e.error==="no-speech"?"No te escuché… ¿lo intentamos otra vez?":"Hubo un problema con el micrófono. Puedes escribirme.","sad",1)};
+ rec.onend=()=>{listening=false;$("#mb").textContent="";$("#mb").classList.remove("on");if(mood==="listen")setMood("neutral")};
+ try{rec.start()}catch(e){}}
+function sendQ(){const i=$("#qi"),t=i.value;i.value="";ask(t)}
+/* ---- sentimiento de texto (X, foros, noticias) ---- */
+const POS="alcist,sube,subid,rompe,ruptura,compra,rebote,rebota,soporte,fuerte,record,entradas,recupera,optimis,bull,rally,surge,breakout,buy,long,upside,higher,inflow,accumul,rebound,gain,strong,adopt,approv,positiv,ganancia,impulso,sostiene,climb,rise,jump,soar,bid".split(","),NEG="bajist,baja,caida,cae,venta,vender,panico,miedo,riesgo,hawkish,recesion,bear,sell,short,crash,dump,plunge,drop,breakdown,outflow,liquidat,fear,selloff,lower,weak,ban,hack,lawsuit,yield,rendimiento,inflacion,inflation,decline,slump,tumble,fall,pressure,presion,debil,negativ,perdida".split(",");
+function sent(t){const w=t.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").split(/[^a-z0-9]+/);let b=0,r=0;const hit=[];w.forEach((x,i)=>{if(x.length<3)return;const ng=/^(no|not|sin|never|nunca)$/.test(w[i-1]||"")||/^(no|not|sin)$/.test(w[i-2]||""),p=POS.some(k=>x.startsWith(k)&&x.length<=k.length+7),q=NEG.some(k=>x.startsWith(k)&&x.length<=k.length+7);if(p||q){const up=(p&&!ng)||(q&&ng);up?b++:r++;hit.push([x,up])}});return{b,r,s:(b-r)/(b+r+2),hit}}
+function voiceN(){return VO.length}
+function voiceScore(){let a=0,b=0;VO.forEach(v=>{const w=Math.pow(.5,(Date.now()-v.t)/36e5);a+=v.s*w;b+=w});return b?clamp(a/b*1.6):0}
+function addVoice(txt,src,forced){txt=(txt||"").trim();if(txt.length<12)return;const s=sent(txt);if(forced!==undefined)s.s=forced;VO.unshift({t:Date.now(),txt:txt.slice(0,220),s:s.s,src,hit:s.hit.slice(0,8)});VO.length=Math.min(VO.length,30);chips();if(tab===1)renderVoices();
+ const tone=s.s>.15?"alcista":s.s<-.15?"bajista":"mixto";say(`Leí ese texto (${src}): tono ${tone} (${s.s.toFixed(2)}). Llevo ${VO.length} voz${VO.length>1?"es":""} recolectada${VO.length>1?"s":""}${VO.length<3?"; con 3 o más empiezo a pesarlas en mi análisis":`; el tono acumulado es ${voiceScore().toFixed(2)}`}.`,s.s>.15?"happy":s.s<-.15?"sad":"think",1)}
+function addText(){const t=$("#vt").value;if(t.trim().length<12){say("Pega un texto un poco más largo (un tweet, un titular o varios comentarios) y lo analizo.","think",1);return}addVoice(t,"texto pegado");$("#vt").value=""}
+async function pasteClip(){try{const t=await navigator.clipboard.readText();if(t){clipLast=t;addVoice(t,"portapapeles")}else say("El portapapeles está vacío. Copia primero un texto de X o de una noticia.","think",1)}catch(e){say("El navegador no me deja leer el portapapeles. Pega el texto con Ctrl+V en la caja.","sad",1)}}
+function togClip(){clipOn=!clipOn;$("#bcl")&&$("#bcl").classList.toggle("on",clipOn);say(clipOn?"¡Modo oído activado!  Copia (Ctrl+C) un texto de X o de una noticia y vuelve a esta ventana: lo analizo solo.":"Auto-captura desactivada.","happy",1)}
+addEventListener("focus",async()=>{if(!clipOn)return;try{const t=await navigator.clipboard.readText();if(t&&t!==clipLast&&t.length>20){clipLast=t;addVoice(t,"auto-captura")}}catch(e){}});
+function renderVoices(){const l=$("#vl"),g=$("#vg");if(!l)return;l.innerHTML=VO.length?VO.map(v=>`<div class="vt"><small>${new Date(v.t).toLocaleTimeString("es")} · ${esc(v.src)}</small> <b class="${v.s>.15?'up':v.s<-.15?'dn':'am'}">${v.s.toFixed(2)}</b><br>${esc(v.txt)}<br>${v.hit.map(h=>`<small class="${h[1]?'up':'dn'}">#${h[0]}</small>`).join(" ")}</div>`).join(""):"<small>Todavía no hay textos. Pega tweets, titulares o comentarios.</small>";
+ const sc=VO.length?voiceScore():0;g.innerHTML=`<div class="big ${sc>.15?'up':sc<-.15?'dn':'am'}">${VO.length?(sc>.15?"Alcista":sc<-.15?"Bajista":"Mixto"):"—"}</div><small>${VO.length} voces · puntuación ${sc.toFixed(2)} ${VO.length<3?"(se usa en el análisis desde 3 voces)":"(ya pesa 15% en el análisis)"}</small><div class="cb" style="margin-top:8px"><i style="left:${sc>=0?50:50+sc*50}%;width:${Math.abs(sc)*50}%;background:var(--${sc>=0?'up':'dn'})"></i></div><h3 style="margin-top:12px">Abrir para ver en tu pantalla 2</h3>${LNK[cur].map(x=>`<a href="${x[1]}" target="_blank" rel="noopener">${x[0]} ↗</a><br>`).join("")}`}
+async function share2(){try{s2=await navigator.mediaDevices.getDisplayMedia({video:true,audio:false});const v=$("#v2");v.srcObject=s2;v.classList.remove("hide");await v.play();s2.getVideoTracks()[0].onended=()=>{s2=null;v.classList.add("hide");chips()};chips();
+ say("¡Segunda pantalla conectada!  Ponla en X, noticias o un foro. Aviso con total honestidad: desde un video no puedo leer texto, así que copia lo importante y pégalo en «Voces» (o activa  auto-captura) y lo analizo al instante.","wow",1)}catch(e){$("#fb").classList.remove("hide");say("No pude abrir la segunda pantalla. Ábreme en pestaña propia o pega el texto a mano.","sad",1)}}
+async function readS2(){if(!smp||!s2)return;const v=$("#v2"),c=document.createElement("canvas");c.width=v.videoWidth;c.height=v.videoHeight;c.getContext("2d").drawImage(v,0,0);const b=await new Promise(r=>c.toBlob(r,"image/png"));say("Leyendo tu segunda pantalla con Claude… ","scan",1);
+ try{const o=await smp.json(`Lee esta captura (X, noticias o foro) sobre ${M[cur].p}. Transcribe en 'texto' los titulares/comentarios relevantes (máx 600 caracteres, sin inventar) y da 'tono' de -1 (bajista) a 1 (alcista). JSON {"texto":string,"tono":number}`,{images:b,cache:false});addVoice(o.texto||"(sin texto legible)","Claude lee pantalla 2",clamp(+o.tono||0))}catch(e){say("No pude leer esa pantalla con Claude. Copia el texto y pégalo.","sad",1)}}
+(async()=>{try{smp=await claude.use("sample");if(smp)document.addEventListener("DOMContentLoaded",()=>{});setTimeout(()=>{const b=$("#bcd");if(b&&smp)b.classList.remove("hide")},1500)}catch(e){smp=null}})();
+/* ---- conversación ---- */
+function ctxT(){const a=A&&A.ok?A:null;return `${cur?M[cur].p:"sin mercado"}; veredicto ${vd||"recolectando"}; compra ${a?a.buy:"?"}%; RSI ${a?a.rsi.toFixed(0):"?"}; velas ${a?a.n:0}; voces ${VO.length} (tono ${VO.length?voiceScore().toFixed(2):"n/a"}); sesgo dossier ${cur?bias(cur).toFixed(2):"?"}; mercado ${cur&&isClosed(cur)?"cerrado":"abierto"}`}
+function reply(q){const n=q.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,""),a=A&&A.ok?A:null,m=cur?M[cur]:null,h=r=>r.test(n),pf=x=>calibrated()?fp(x):"la línea del gráfico";
+ if(h(/\b(hola|buenas|hey|buen dia|que tal)\b/))return[`¡Hola!  Estoy lista para ayudarte${m?" con "+m.p:""}. Pregúntame: ¿qué ves?, ¿compro o vendo?, ¿cuánto arriesgo? o ¿qué dicen en X?`,"happy"];
+ if(h(/gracias|genial|bien hecho/))return["¡De nada! Para eso estoy. Y recuerda: primero cuida tu capital, las ganancias vienen después. ","love"];
+ if(h(/silencio|callate|calla\b|para de hablar/)){try{speechSynthesis.cancel()}catch(e){}Q=[];tok++;return["Vale, me quedo calladita. ","neutral"]}
+ if(h(/repite|otra vez|no entend/))return[lastAns||"Aún no he dicho nada importante.","neutral"];
+ if(h(/chiste|animo|consejo|tip|cuentame algo/))return[TIPS[Math.floor(Math.random()*TIPS.length)],"happy"];
+ if(h(/pantalla|compart|como funciona|como te uso|ayuda/))return["Es fácil: 1) elige un mercado, 2) comparte tu pantalla o sube una captura de XM, 3) arrastra un recuadro sobre las velas y 4) calibra dos precios del eje. Con eso leo velas, RSI, medias y niveles, y los mezclo con la investigación y con lo que dicen en X.","happy"];
+ if(h(/noticia|twitter|\bx\b|foro|voces|sentimiento|dicen|redes|opinion/)){const sc=VO.length?voiceScore():null;return[VO.length?`He recolectado ${VO.length} voz${VO.length>1?"es":""}; el tono acumulado es ${sc>.15?"alcista":sc<-.15?"bajista":"mixto"} (${sc.toFixed(2)}). ${VO.length<3?"Con 3 o más empiezo a pesarlas.":"Ya cuentan un 15% en mi análisis."}`:"Aún no tengo textos de X o noticias. Abre X en tu pantalla 2, copia unos tweets y pégalos en «Voces» (o activa  auto-captura).","think"]}
+ if(h(/fuente|dossier|investig|datos del mercado/)&&m){const B=m.src.filter(s=>s[2]>0).length,S=m.src.filter(s=>s[2]<0).length;return[`Mi dossier de ${m.p} tiene ${m.src.length} fuentes: ${B} a compra, ${S} a venta. Su frescura hoy es ${Math.round(fresh(cur)*100)}% (pierden peso con los días) y el sesgo efectivo es ${bias(cur).toFixed(2)}.`,"think"]}
+ if(h(/horario|abierto|cerrado/)&&cur)return[isClosed(cur)?"El oro está cerrado por el fin de semana (de viernes ~21:00 a domingo ~22:00 UTC). No hay nada real que operar ahora.":"El mercado parece abierto. Confirma el horario exacto del instrumento en XM.","neutral"];
+ if(h(/cuanto arriesg|lote|tamano|capital|riesgo/))return["Regla sensata: arriesga 1–2% de tu cuenta por operación. En la pestaña «Herramientas» tienes la calculadora: pones saldo, entrada y stop, y te digo cuántas unidades. Primero practica en cuenta demo. ","happy"];
+ if(!a&&h(/ves|compro|vendo|compr|vend|hago|entro|rsi|soporte|resistencia|estado|resumen|como va|espera|tendencia/))return["Todavía no veo un gráfico que pueda leer. Comparte tu pantalla (o sube una captura), marca la zona de velas y te cuento.","think"];
+ if(h(/que ves|que miras|como va|resumen|estado|lectura/))return[`Veo ${a.n} velas de ${m.p}. Tendencia ${a.tr>.25?"alcista":a.tr<-.25?"bajista":"sin definir"}, RSI ${a.rsi.toFixed(0)}, última vela: ${a.pn.toLowerCase()}. Mi veredicto es ${vd||"RECOLECTANDO"} con ${a.buy}% compra / ${100-a.buy}% venta.`,vd==="COMPRAR"?"happy":vd==="VENDER"?"sad":"scan"];
+ if(h(/compro|vendo|compr|vend|que hago|recomiend|conviene|entro|entrar|operar|opero/)){if(valid<need)return[`Aún estoy recolectando datos (${valid}/${need} lecturas). Mejor esperar un poco: decidir con prisa es la forma más rápida de perder.`,"scan"];if(a.closed)return["El mercado está cerrado, así que lo sensato es esperar a que abra.","sleep"];
+  return[vd==="ESPERAR"?`Ahora mismo estamos en ${Math.abs(a.buy-50)<8?"zona 50/50":"una señal débil"} (${a.buy}% compra). Mi recomendación es ESPERAR: sin ventaja clara no hay motivo para arriesgar. Revisa de nuevo en unos minutos.`:`Mi lectura es ${vd} (${vd==="COMPRAR"?a.buy:100-a.buy}% de probabilidad estimada). Si decides entrar: entrada cerca de ${pf(a.pl.entry)}, stop en ${pf(a.pl.stop)}, objetivo ${pf(a.pl.tp1)}. Nunca sin stop, y es una estimación, no una garantía.`,vd==="COMPRAR"?"happy":vd==="VENDER"?"sad":"think"]}
+ if(h(/50|esperar|espera|cuanto tiempo|cuando/))return[a?`Cuando la probabilidad ronda 50/50 no hay ventaja: es como lanzar una moneda. Espera a que la señal se aleje de esa zona y se sostenga unas lecturas seguidas. ${waitUntil>Date.now()?"Te sugiero revisar en ~"+Math.ceil((waitUntil-Date.now())/6e4)+" min.":""}`:"Con 50/50 recomiendo esperar y seguir recolectando datos antes de decidir.","think"];
+ if(h(/\brsi\b/))return[a?`El RSI mide la fuerza de las últimas subidas frente a las bajadas. Ahora marca ${a.rsi.toFixed(0)}: sobre 70 suele ser sobrecompra y bajo 30 sobreventa.`:"El RSI va de 0 a 100: sobre 70 sobrecompra, bajo 30 sobreventa. Comparte tu gráfico y te digo el actual.","think"];
+ if(h(/media|ema/))return["Las medias móviles (EMA) suavizan el precio. Si la rápida está sobre la lenta, la tendencia es alcista; si está debajo, bajista; si se cruzan sin parar, el mercado está lateral.","think"];
+ if(h(/soporte|resistencia|nivel/))return[a?`Soportes detectados: ${a.S.map(pf).join(", ")}. Resistencias: ${a.R.map(pf).join(", ")}. ${calibrated()?"":"Calibra precios para ver los números."}`:"Los soportes son pisos donde el precio suele rebotar y las resistencias, techos. Los detecto en tu gráfico.","think"];
+ return null}
+async function ask(q){q=(q||"").trim();if(!q)return;LOG.push([new Date().toLocaleTimeString("es")," Tú: "+q]);if(tab===6)tb(6);lastAct=Date.now();let r=reply(q);
+ if(!r&&smp){try{say("Déjame pensarlo… ","think",1);const o=await smp.json(`Eres Nubi, asistente de trading amable y prudente. Responde en español, máximo 3 frases, sin prometer ganancias ni dar órdenes seguras. Contexto: ${ctxT()}. Pregunta: ${q}. JSON {"respuesta":string}`,{cache:false});r=[o.respuesta,"happy"]}catch(e){r=null}}
+ if(!r)r=["Mmm, no estoy segura de haberte entendido. Prueba con: «¿qué ves?», «¿compro o vendo?», «¿cuánto arriesgo?», «¿qué dicen en X?» o «¿por qué esperar?».","think"];lastAns=r[0];say(r[0],r[1],1)}
+/* ---- historial local ---- */
+function lsGet(k){try{return JSON.parse(localStorage.getItem(k)||"[]")}catch(e){return[]}}
+function snap(tag){if(!A||!A.ok)return;const h=lsGet("hx_"+cur);h.unshift({t:Date.now(),v:vd||"…",b:A.buy,p:calibrated()?+A.last.toFixed(2):null,g:tag});try{localStorage.setItem("hx_"+cur,JSON.stringify(h.slice(0,150)))}catch(e){}}
+function histHtml(){const h=lsGet("hx_"+cur);if(!h.length)return"<small>Aún no hay registros. Se guardan en este navegador mientras analizas, y los comparo la próxima vez.</small>";
+ const now=Date.now(),near=ms=>h.find(x=>now-x.t>=ms*.8),cmp=[[15,"hace ~15 min"],[60,"hace ~1 h"],[1440,"hace ~1 día"]].map(([m,l])=>{const x=near(m*6e4);return x?`<li>${l}: <b class="${x.v==='COMPRAR'?'up':x.v==='VENDER'?'dn':'am'}">${x.v}</b> (${x.b}% compra) → ahora <b>${vd||"…"}</b> (${A&&A.ok?A.buy:"?"}%)</li>`:""}).join("");
+ return`<h3>Comparación con tus lecturas anteriores</h3><ul>${cmp||"<li><small>Aún no hay lecturas lo bastante antiguas.</small></li>"}</ul><div class="sc"><table><tr><th>Cuándo</th><th>Señal</th><th>% compra</th><th>Precio leído</th><th>Motivo</th></tr>${h.slice(0,25).map(x=>`<tr><td>${new Date(x.t).toLocaleString("es")}</td><td class="${x.v==='COMPRAR'?'up':x.v==='VENDER'?'dn':'am'}"><b>${x.v}</b></td><td>${x.b}%</td><td>${x.p??"—"}</td><td>${x.g}</td></tr>`).join("")}</table></div><button class="btn" onclick="try{localStorage.removeItem('hx_'+cur)}catch(e){};tb(5)"> Borrar historial</button>`}
+/* ---- herramientas ---- */
+function risk(){const g=id=>parseFloat($(id).value),b=g("#rb"),p=g("#rp"),e=g("#re"),s=g("#rs2"),o=$("#ro");if(!(b>0&&p>0&&e>0&&s>0)||e===s){o.innerHTML="<small>Completa saldo, % y precios.</small>";return}
+ const rd=b*p/100,d=Math.abs(e-s),u=rd/d;o.innerHTML=`<div class="kv"><span>Pierdes si toca el stop</span><b class="dn">$${rd.toFixed(2)}</b><span>Distancia al stop</span><b>${d.toFixed(2)}</b><span>Tamaño de posición</span><b>${u.toFixed(4)} unidades (${M[cur].p.startsWith("XAU")?"onzas":"BTC"})</b><span>Valor nominal</span><b>$${(u*e).toFixed(2)}</b></div><small>Convierte las unidades a lotes con el «tamaño de contrato» que XM indica en la ficha del instrumento. ${p>2?'<b class="dn">Más de 2% por operación es arriesgado.</b>':""}</small>`}
+function fillRisk(){if(A&&A.ok&&A.pl&&A.pl.entry!==undefined&&calibrated()){$("#re").value=A.pl.entry.toFixed(2);$("#rs2").value=A.pl.stop.toFixed(2);risk()}else say("Necesito un veredicto de compra/venta y precios calibrados para rellenar entrada y stop.","think",1)}
+function chkItems(){const a=A&&A.ok?A:null;return[["Mercado abierto",!!cur&&!isClosed(cur),1],["Veo ≥ 8 velas y llevo suficientes lecturas",!!a&&valid>=need,1],["La señal está fuera de la zona 50/50 y se sostiene",!!a&&(vd==="COMPRAR"||vd==="VENDER"),1],["Precios calibrados (puedo poner stop exacto)",calibrated(),1],["Dossier fresco y coherente con el gráfico",!!a&&a.fr>.5&&!a.mism,1],["Definí mi stop loss y arriesgo ≤ 2%",!!CK.a,0],["No hay noticia fuerte en la próxima hora",!!CK.b,0],["Lo practiqué antes en cuenta demo",!!CK.c,0]]}
+function chkHtml(){const it=chkItems(),ok=it.filter(x=>x[1]).length;return`<div class="ck">${it.map((x,i)=>`<label><input type="checkbox" ${x[1]?"checked":""} ${x[2]?"disabled":`onchange="CK['${"abc"[i-5]}']=this.checked;tb(2)"`}> <span class="${x[1]?'up':''}">${x[0]}${x[2]?" <small>(automático)</small>":""}</span></label>`).join("")}</div><div class="bar"><i style="width:${ok/it.length*100}%;background:var(--${ok>=7?'up':ok>=5?'am':'dn'})"></i></div><b class="${ok>=7?'up':ok>=5?'am':'dn'}">${ok}/${it.length} ${ok>=7?"· listo para considerar la operación":"· aún no es buen momento"}</b>`}
+function report(){const a=A&&A.ok?A:null;const t=`HOWXM · ${cur?M[cur].p:""} · ${new Date().toLocaleString("es")}\nVeredicto: ${vd||"recolectando"} (${a?a.buy+"% compra / "+(100-a.buy)+"% venta":"sin lectura"})\nVelas: ${a?a.n:0} · RSI ${a?a.rsi.toFixed(0):"-"} · Dossier fresco ${cur?Math.round(fresh(cur)*100):0}% · Voces ${VO.length}\nNo es asesoría financiera.`;try{navigator.clipboard.writeText(t);say("¡Informe copiado al portapapeles! ","happy",1)}catch(e){say("No pude copiar. Selecciona el texto manualmente.","sad",1)}}
+function setVoice(){vsel=+$("#vsel").value;VP=+$("#vp").value;VR=+$("#vr").value;if(voice)speak("Así sueno ahora, ¿te gusta?")}
+function beep(v){if(!snd)return;try{const c=bc||(bc=new(window.AudioContext||window.webkitAudioContext)()),f=v==="COMPRAR"?[523,784]:v==="VENDER"?[523,330]:[440,440];f.forEach((x,i)=>{const o=c.createOscillator(),g=c.createGain(),t=c.currentTime+i*.18;o.frequency.value=x;o.connect(g);g.connect(c.destination);g.gain.setValueAtTime(.001,t);g.gain.exponentialRampToValueAtTime(.15,t+.02);g.gain.exponentialRampToValueAtTime(.001,t+.16);o.start(t);o.stop(t+.18)})}catch(e){}}
+/* ---- pestañas ---- */
+function openM(k){cur=k;A=null;hist=[];sm=0;vd="";valid=0;hold=0;cand="";waitUntil=0;ticks=0;$("#home").classList.add("hide");$("#mv").classList.remove("hide");place("#nm");$("#mt").textContent=M[k].ico+" "+M[k].p+" · "+M[k].n;
+ $("#tabs").innerHTML=["Lectura en vivo","Voces (X/foros)","Herramientas","Fuentes y foros","Datos","Historial","Chat","Minuto a minuto"].map((t,i)=>`<button class="btn ${i?'':'on'}" onclick="tb(${i})">${t}</button>`).join("");tb(0);scrollTo(0,0);mhUpdate();ant();
+ const m=M[k],B=m.src.filter(s=>s[2]>0).length,S=m.src.filter(s=>s[2]<0).length,b=bias(k),pr=lsGet("hx_"+k)[0];
+ say(`¡Elegiste ${m.n}! Revisé ${m.src.length} fuentes: ${B} a compra, ${S} a venta. Como las fuentes envejecen, hoy su frescura es ${Math.round(fresh(k)*100)}% y el sesgo efectivo ${b.toFixed(2)} (${Math.abs(b)<.2?"sin ventaja clara":b>0?"inclinado a comprar":"inclinado a vender"}).`,"happy",1);
+ if(isClosed(k))say(" Ojo: el oro está cerrado por el fin de semana. Lo que veas en pantalla no se mueve; el análisis útil empieza cuando abra (domingo ~22:00 UTC).");
+ if(pr)say(`La última vez que lo analizamos (${new Date(pr.t).toLocaleString("es")}) la señal era ${pr.v} con ${pr.b}% de compra. Lo iré comparando.`);
+ say("Ahora comparte tu pantalla con el gráfico de XM (botón morado). Si quieres, añade una 2.ª pantalla con X o noticias. Y puedes hablarme con el .")}
+function tb(i){tab=i;[...$("#tabs").children].forEach((b,j)=>b.classList.toggle("on",i===j));const m=M[cur];let h="";
+ if(i===0)h='<div id="lv"><small>Cuando comparta tu gráfico aquí aparecerán mis métricas en vivo.</small></div>';
+ if(i===1)h=`<div class="g" style="margin:0"><div><h3> Lo que dicen (X, foros, noticias)</h3><p class="mu" style="margin-top:0">En tu 2.ª pantalla abre X o una noticia, selecciona texto, copia (Ctrl+C) y pégalo aquí. Mido el tono y lo sumo a mi análisis.</p><textarea id="vt" rows="4" placeholder="Pega aquí tweets, titulares o comentarios…"></textarea><div class="row"><button class="btn p" onclick="addText()">Analizar texto</button><button class="btn" onclick="pasteClip()"> Pegar del portapapeles</button><button class="btn ${clipOn?'on':''}" id="bcl" onclick="togClip()"> Auto-captura al copiar</button><button class="btn hide" id="bcd" onclick="readS2()"> Leer pantalla 2 con Claude</button></div><div id="vl" style="margin-top:8px"></div></div><div id="vg"></div></div>`;
+ if(i===2)h=`<div class="g" style="margin:0"><div><h3> Calculadora de riesgo</h3><div class="kv"><span>Saldo $</span><input type="number" id="rb" value="10000" oninput="risk()"><span>Riesgo %</span><input type="number" id="rp" value="1" step="0.1" oninput="risk()"><span>Entrada</span><input type="number" id="re" step="any" oninput="risk()"><span>Stop loss</span><input type="number" id="rs2" step="any" oninput="risk()"></div><button class="btn" onclick="fillRisk()">↙ Usar mi plan actual</button><div id="ro" style="margin-top:8px"></div></div><div><h3>[OK] Lista antes de operar</h3><div id="ckl">${chkHtml()}</div></div></div>
+ <h3 style="margin-top:14px"> Voz y avisos</h3><div class="kv"><span>Voz</span><select id="vsel" onchange="setVoice()">${VS.length?VS.map((v,j)=>`<option value="${j}" ${j===vsel?"selected":""}>${esc(v.name)}</option>`).join(""):"<option value=0>Voz por defecto</option>"}</select><span>Tono (más agudo = más tierna)</span><input type="range" id="vp" min=".8" max="1.8" step=".05" value="${VP}" onchange="setVoice()"><span>Velocidad</span><input type="range" id="vr" min=".8" max="1.3" step=".05" value="${VR}" onchange="setVoice()"></div>
+ <label class="row" style="align-items:center"><input type="checkbox" ${snd?"checked":""} onchange="snd=this.checked"> Sonido cuando cambie la señal</label><label class="row" style="align-items:center"><input type="checkbox" ${hf?"checked":""} onchange="hf=this.checked;if(hf&&!voice)togVoice()"> Conversación manos libres (tras hablar Nubi, escucha sola)</label><div class="row"><button class="btn" onclick="report()"> Copiar informe</button></div>`;
+ if(i===3){const B=m.src.filter(s=>s[2]>0).length,S=m.src.filter(s=>s[2]<0).length,N=m.src.length-B-S,L=m.src.length;
+  h=`<small>${L} fuentes · <span class="up">${B} compra</span> · <span class="dn">${S} venta</span> · <span class="am">${N} neutral</span> · frescura ${Math.round(fresh(cur)*100)}%</small><div class="stk"><i style="width:${B/L*100}%;background:var(--up)"></i><i style="width:${N/L*100}%;background:var(--am)"></i><i style="width:${S/L*100}%;background:var(--dn)"></i></div><div class="sc"><table><tr><th>Fuente</th><th>Tipo</th><th>Lectura</th><th>Señal</th><th>Fecha</th><th>Peso hoy</th></tr>${m.src.map(s=>`<tr><td><a href="${s[4]}" target="_blank" rel="noopener">${s[0]}</a></td><td>${s[5]}</td><td>${s[1]}</td><td class="${s[2]>0?'up':s[2]<0?'dn':'am'}"><b>${s[2]>0?'COMPRA':s[2]<0?'VENTA':'NEUTRAL'}</b></td><td>${s[6]}</td><td>${(s[3]*dec(s)).toFixed(2)} / ${s[3]}</td></tr>`).join("")}</table></div><small>Las fuentes pierden peso con el tiempo (técnicas: mitad cada 2 días; macro e institucionales: cada 14). X, FOMO y foros con login no son accesibles: lo de redes viene de agregadores citados. Investigado el 2–3 oct 2026.</small>`}
+ if(i===4)h=m.st.map(s=>`<div style="display:flex;justify-content:space-between"><span>${s[0]}</span><b class="${s[3]>0?'up':s[3]<0?'dn':'am'}">${s[1]}</b></div><div class="bar"><i style="width:${s[2]}%;background:var(--${s[3]>0?'up':s[3]<0?'dn':'am'})"></i></div>`).join("")+`<p class="mu">${esc(m.res)}</p>`;
+ if(i===5)h=histHtml();
+ if(i===6)h=`<div class="chat">${LOG.slice().reverse().map(l=>`<p><small>${l[0]}</small>${esc(l[1])}</p>`).join("")}</div>`;
+ $("#tb").innerHTML=h;if(i===0&&A)liveTab();if(i===1)renderVoices();if(i===2)risk()}
+/* ---- análisis en vivo ---- */
+function chips(){const c=[],cl=cur&&isClosed(cur);c.push(cl?'<span class="ch dn"> Mercado cerrado</span>':'<span class="ch up">● Mercado abierto</span>');c.push(`<span class="ch"> ${A&&A.ok?A.n+" velas":"sin lectura"}</span>`);c.push(`<span class="ch ${calibrated()?'up':'am'}"> ${calibrated()?"calibrado":"sin calibrar"}</span>`);if(cur)c.push(`<span class="ch ${fresh(cur)>.5?'up':'am'}"> dossier ${Math.round(fresh(cur)*100)}% fresco</span>`);c.push(`<span class="ch"> ${VO.length} voces</span>`,`<span class="ch ${s2?'up':''}"> ${s2?"2 pantallas":"1 pantalla"}</span>`);$("#chips").innerHTML=c.join("")}
+function tick(){if(!cur||!grab())return;const P=A,E=extract();A=E?analyze(E):null;ticks++;lastAct=Date.now();if(mood==="sleep")setMood("neutral");
+ if(A&&A.ok){valid++;need=stream?20:1;const closed=isClosed(cur),mism=calibrated()&&Math.abs(A.last-REF[cur])/REF[cur]>.025,fr=fresh(cur)*(mism?.3:1),vs=VO.length>=3?voiceScore():null,ps=[[A.tech,twt()],[bias(cur),WT.d*fr]];if(vs!==null)ps.push([vs,WT.v]);const ns=newsScore(cur);A.ns=ns;if(ns!==null)ps.push([ns,WT.n]);
+  let sw=0,fs=0;ps.forEach(p=>{fs+=p[0]*p[1];sw+=p[1]});A.fin=fs/sw;A.fr=fr;A.mism=mism;A.vs=vs;A.closed=closed;
+  sm=valid<=1?A.fin:sm*.7+A.fin*.3;hist.push(sm);if(hist.length>150)hist.shift();A.buy=Math.round(50+45*clamp(sm*1.2));
+  const bt=vd==="COMPRAR"?55:62,st=vd==="VENDER"?45:38;let tg=A.buy>=bt?"COMPRAR":A.buy<=st?"VENDER":"ESPERAR";if(closed)tg="ESPERAR";
+  if(tg===cand)hold++;else{cand=tg;hold=1}
+  A.pl=plan(A,vd||"ESPERAR");
+  if(valid>=need){const ok=tg==="ESPERAR"?hold>=2:hold>=(stream?6:1);if(ok&&tg!==vd){vd=tg;if(vd==="ESPERAR")waitUntil=Date.now()+(Math.abs(A.buy-50)<5?4:2.5)*6e4;A.pl=plan(A,vd);ant();beep(vd);snap("cambio de señal");announce()}}
+  else if(valid===1||valid===Math.round(need/2)||valid===need-3)say(valid===1?"Empiezo a recolectar datos de tu gráfico…  No voy a decidir con una sola mirada.":`Llevo ${valid} de ${need} lecturas. Paciencia: mejor decidir con datos que con prisa.`,"scan");
+  A.v=vd;if(Date.now()-lastSnap>3e4){lastSnap=Date.now();snap("auto")}
+  paint();react(P);if(vd&&Date.now()-lastSay>30000&&!Q.length)periodic()}
+ else{paint();if(ticks%5===1)say(A?`Solo detecto ${A.n} velas y necesito al menos 8. Marca bien la zona de velas (sin textos ni eje de precios).`:"No logro leer la zona. Marca un recuadro más grande sobre las velas.","think")}}
+function react(P){if(!A||!A.ok||!P||!P.ok||Date.now()-lastReact<12000)return;const a=A;let m=null;
+ if(Math.abs(a.last-P.last)>1.8*a.atr)m=["¡Ojo! Movimiento brusco: el precio saltó más de 1.8 veces su rango normal. No entres en caliente.","alert"];
+ else if(P.R[0]!==undefined&&P.last<P.R[0]&&a.last>P.R[0])m=["¡Rompió una resistencia!  Espera a que la vela cierre arriba antes de creerlo: las rupturas falsas abundan.","wow"];
+ else if(P.S[0]!==undefined&&P.last>P.S[0]&&a.last<P.S[0])m=["Perdió un soporte [!]. Si la vela cierra debajo, el sesgo se vuelve más bajista.","alert"];
+ else if(P.rsi<70&&a.rsi>=70)m=["El RSI entró en sobrecompra (70+). El impulso es fuerte, pero puede frenar pronto.","think"];
+ else if(P.rsi>30&&a.rsi<=30)m=["El RSI entró en sobreventa (30−). Puede rebotar, pero no es una señal de compra por sí sola.","think"];
+ if(m){lastReact=Date.now();events.push(m[0].slice(0,60));say(m[0],m[1],1)}}
+function announce(){const a=A,v=vd,pl=a.pl,k_=calibrated(),pf=x=>k_?fp(x):"la línea del gráfico",bu=a.buy;
+ const st=a.tr>.25?"la media rápida está sobre la lenta (tendencia alcista)":a.tr<-.25?"la media rápida está bajo la lenta (tendencia bajista)":"las medias están enredadas (sin tendencia clara)";
+ const ex=`Leí ${a.n} velas: ${st}. RSI ${a.rsi.toFixed(0)}; última vela: ${a.pn.toLowerCase()}.`,pb=`Probabilidad estimada: ${bu}% compra / ${100-bu}% venta (heurística, no garantía).`;
+ const dos=`Investigación: sesgo ${bias(cur).toFixed(2)} con ${Math.round(a.fr*100)}% de frescura${a.mism?" — ¡ojo! tu precio difiere más de 2.5% del que tenía el dossier, así que casi no lo uso":""}. ${a.vs!=null?`Voces de X/foros: ${a.vs.toFixed(2)}.`:"Aún sin voces de X/foros (pégalas en «Voces»)."}`;
+ if(v==="COMPRAR"){say(`¡Atención! Veredicto: COMPRAR . ${ex}`,"happy",1);say(pb+" "+dos);say(`Plan: entrada cerca de ${pf(pl.entry)}, stop en ${pf(pl.stop)}, objetivos ${pf(pl.tp1)} y ${pf(pl.tp2)}. Si pierde el stop, la idea falló: se sale sin discutir.`)}
+ else if(v==="VENDER"){say(`Veredicto: VENDER . ${ex}`,"sad",1);say(pb+" "+dos);say(`Plan: entrada cerca de ${pf(pl.entry)}, stop en ${pf(pl.stop)}, objetivos ${pf(pl.tp1)} y ${pf(pl.tp2)}. Vender en CFD es apostar a que baja; el stop te protege si sube.`)}
+ else{const z=Math.abs(bu-50)<8,min=Math.ceil((waitUntil-Date.now())/6e4);say(a.closed?"El mercado está cerrado: lo mejor es esperar a que abra. ":`${z?"Estamos en zona 50/50 ":"La señal es débil"}: ${bu}% compra / ${100-bu}% venta. Mi consejo es NO operar todavía y esperar unos ${min} minutos mientras recolecto más datos.`,a.closed?"sleep":"think",1);say(ex+" "+dos);say(`Una compra tendría más sentido si el precio rompe y sostiene sobre ${pf(pl.up)}; una venta, si cae bajo ${pf(pl.dn)}. No operar también es ganar: protege tu capital.`)}
+ if(!k_)say("Consejo: con «Calibrar precios» te doy entrada, stop y objetivos con números exactos.")}
+function periodic(){const a=A;if(!a)return;if(Math.random()<.5)say(`Sigo vigilando ${M[cur].p}: ${vd}, ${a.buy}% compra, RSI ${a.rsi.toFixed(0)}, ${a.n} velas.${VO.length?` Voces: ${voiceScore().toFixed(2)}.`:""}`,vd==="COMPRAR"?"happy":vd==="VENDER"?"sad":"neutral");else say(TIPS[Math.floor(Math.random()*TIPS.length)],"happy")}
+function paint(){overlay();$("#rs").innerHTML=A&&A.ok?verdict():`<small>No logro leer suficientes velas. Marca la zona de velas con « Marcar zona».</small>`;chips();if(tab===0)liveTab();if(tab===2&&$("#ckl"))$("#ckl").innerHTML=chkHtml()}
+function gauge(b){return`<div class="pg"><i class="zn"></i><b style="left:${b}%"></b></div><div class="lb"><span class="dn">Vender ${100-b}%</span><span class="mu">zona 50/50</span><span class="up">Comprar ${b}%</span></div>`}
+function verdict(){const a=A,f=x=>calibrated()?fp(x):"ver línea";
+ if(valid<need)return`<div class="big" style="color:var(--ac2)">RECOLECTANDO DATOS…</div><div class="bar" style="margin-top:8px"><i style="width:${valid/need*100}%;background:var(--ac2)"></i></div><small>${valid}/${need} lecturas. Aún no es momento de decidir: observo el mercado unos segundos.</small>`;
+ const v=vd||"ESPERAR",col=v==="COMPRAR"?"up":v==="VENDER"?"dn":"am",zone=Math.abs(a.buy-50)<8,c=Math.round(clamp(25+70*Math.abs(a.buy-50)/45-(a.mism?15:0)-(a.fr<.4?8:0)-(a.n<20?8:0),10,92)),p=a.pl;
+ const wt=v==="ESPERAR"?`<div class="fb" style="margin:8px 0"> ${a.closed?"Mercado cerrado: espera a que abra.":(zone?"Zona 50/50: no operes todavía. ":"Señal débil. ")+(waitUntil>Date.now()?"Revisa de nuevo en ~"+Math.max(1,Math.ceil((waitUntil-Date.now())/6e4))+" min; sigo recolectando datos.":"Sigo recolectando datos; si se sostiene fuera de la zona te aviso.")}</div>`:"";
+ const pl=v==="ESPERAR"?`<div class="kv"><span>Compra si rompe y sostiene</span><b class="up">${f(p.up)}</b><span>Venta si cae bajo</span><b class="dn">${f(p.dn)}</b></div>`:`<div class="kv"><span>Entrada</span><b>${f(p.entry)}</b><span>Stop loss</span><b class="dn">${f(p.stop)}</b><span>Objetivo 1</span><b class="up">${f(p.tp1)}</b><span>Objetivo 2</span><b class="up">${f(p.tp2)}</b><span>Riesgo/beneficio</span><b>${p.rr}</b></div>`;
+ return`<div class="big ${col} ${v!=="ESPERAR"?"pulse":""}">${v}</div><small>Confianza ${c}% · ${new Date().toLocaleTimeString("es")} · en vivo</small>${gauge(a.buy)}${wt}${pl}${calibrated()?"":'<small class="am">Calibra precios para ver números exactos.</small>'}`}
+function liveTab(){const a=A,el=$("#lv");if(!el)return;if(!a||!a.ok){el.innerHTML="<small>Aún no leo suficientes velas.</small>";return}
+ const ok=(b,t)=>`<li>${b?"[OK]":"[!]"} ${t}</li>`;
+ el.innerHTML=`<div class="g" style="margin:0"><div><h3>Qué estoy leyendo</h3><div class="kv"><span>Velas detectadas</span><b>${a.n}</b><span>EMA ${a.p1} / ${a.p2}</span><b class="${a.tr>=0?'up':'dn'}">${a.tr>=0?"alcista":"bajista"}</b><span>RSI</span><b class="${a.rsi>70?'dn':a.rsi<30?'up':''}">${a.rsi.toFixed(1)}</b><span>Última vela</span><b>${a.pn}</b><span>Verdes (últ. 8)</span><b>${a.b8}/8</b><span>Posición en rango</span><b>${Math.round(a.pos*100)}%</b><span>Soportes</span><b class="up">${a.S.map(v=>calibrated()?fp(v):"●").join(" · ")}</b><span>Resistencias</span><b class="dn">${a.R.map(v=>calibrated()?fp(v):"●").join(" · ")}</b></div>
+ <h3>Panel de confianza</h3><ul style="list-style:none;padding:0">${ok(!a.closed,a.closed?"Mercado cerrado":"Mercado abierto")}${ok(a.n>=20,`${a.n} velas leídas (ideal ≥ 20)`)}${ok(valid>=need,`${Math.min(valid,need)}/${need} lecturas acumuladas`)}${ok(calibrated(),calibrated()?"Precios calibrados":"Sin calibrar: sin precios exactos")}${ok(a.fr>.5&&!a.mism,a.mism?"Tu precio difiere del dossier: lo ignoro casi por completo":`Dossier ${Math.round(a.fr*100)}% fresco`)}${ok(VO.length>=3,`${VO.length} voces de X/foros (3+ para pesar)`)}</ul>
+ <h3>Evolución de la señal</h3><canvas id="sp" height="70" style="width:100%"></canvas></div>
+ <div><h3>Probabilidad estimada</h3>${gauge(a.buy)}<hr style="border:0;border-top:1px solid var(--bd)"><h3>Cómo se forma la puntuación</h3>${cbar("Tendencia (EMAs)",a.tr)}${cbar("Pendiente",a.sl)}${cbar("RSI",a.rs)}${cbar("Momentum",a.mo)}${cbar("Velas / patrón",a.pat)}<hr style="border:0;border-top:1px solid var(--bd)">${cbar("Técnico (55%)",a.tech)}${cbar(`Dossier (30% × frescura)`,bias(cur))}${cbar("Voces X/foros (15%)",a.vs||0)}${cbar("Noticias en vivo (10%)",a.ns||0)}${cbar("TOTAL",a.fin)}</div></div>`;
+ const s=$("#sp");if(s){const W=s.clientWidth,H=70;s.width=W;const x=s.getContext("2d");x.strokeStyle="#8d9bb8";x.beginPath();x.moveTo(0,H/2);x.lineTo(W,H/2);x.stroke();x.strokeStyle="#b44dff";x.lineWidth=2;x.beginPath();hist.forEach((v,i)=>{const px=i/Math.max(1,hist.length-1)*W,py=H/2-v*H/2*.9;i?x.lineTo(px,py):x.moveTo(px,py)});x.stroke()}}
+/* ===== v6: cuentas, personajes, zona automática, memoria ===== */
+var USER=null,CHAR="dormilon",AR=null,pend=[],minuteLog=[],prevC=null,sessStart=0,events=[],sigN=0,bsum=0,bn=0,roam=false,rtm=null,PW=null,authMode="up",aTimer=null;
+/* ---- cuentas locales ---- */
+const U={get(){try{return JSON.parse(localStorage.getItem("hx_users")||"{}")}catch(e){return{}}},set(o){try{localStorage.setItem("hx_users",JSON.stringify(o))}catch(e){}}};
+const prof=()=>{const u=U.get();return u[USER]||{}};
+function saveProf(p){const u=U.get();u[USER]=p;U.set(u)}
+async function hashPw(pw,salt){try{const k=await crypto.subtle.importKey("raw",new TextEncoder().encode(pw),"PBKDF2",false,["deriveBits"]),b=await crypto.subtle.deriveBits({name:"PBKDF2",salt:new TextEncoder().encode(salt),iterations:150000,hash:"SHA-256"},k,256);return[...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,"0")).join("")}catch(e){let h=5381;for(const c of salt+pw)h=((h<<5)+h+c.charCodeAt(0))>>>0;return"w"+h}}
+/* ---- memoria: solo lo importante ---- */
+function saveSession(){if(!USER||!sessStart||!cur||valid<5){sessStart=0;return}const p=prof(),k=cur,s=(p.sess=p.sess||{})[k]=(p.sess[k]||[]);
+ s.push({d:new Date().toLocaleString("es"),m:Math.round((Date.now()-sessStart)/6e4),sig:sigN,v:vd||"ESPERAR",b:bn?Math.round(bsum/bn):null,ev:events.slice(-5)});if(s.length>30)s.shift();saveProf(p);sessStart=0;minuteLog=[];pend=[]}
+addEventListener("pagehide",saveSession);
+const _stop=stopShare;stopShare=function(){if(stream)saveSession();return _stop()};
+const _sh=share;share=async function(){await _sh();if(stream){sessStart=Date.now();events=[];sigN=0;bsum=0;bn=0;minuteLog=[];prevC=null;AR=null;say("Voy a recolectar datos de tu gráfico cada pocos segundos y a compararlos cada minuto. Al terminar guardo solo lo importante. ","scan")}};
+const _ann=announce;announce=function(){_ann();sigN++;if(calibrated()&&vd!=="ESPERAR")pend.push({t:Date.now(),p:A.last,d:vd==="COMPRAR"?1:-1});if(vd)say(pl(vd==="COMPRAR"?"buy":vd==="VENDER"?"sell":"wait"))};
+function acc(){const L=(prof().learn||{})[cur];return L&&L.n>=10?L.h/L.n:null}
+function twt(){const a=acc();return a===null?.55:.55+clamp((a-.5)*.3,-.1,.1)}
+function evalSig(){if(!calibrated()||!A||!A.ok||!pend.length)return;const p=prof(),L=(p.learn=p.learn||{})[cur]=(p.learn[cur]||{h:0,n:0});pend=pend.filter(s=>{if(Date.now()-s.t<3e5)return true;const mv=(A.last-s.p)*s.d;if(Math.abs(mv)>.5*A.atr){L.n++;if(mv>0)L.h++}return false});saveProf(p)}
+function minute(){const q=minuteLog[0],now={t:Date.now(),b:A.buy,r:A.rsi,n:A.n,p:calibrated()?A.last:null,v:vd||"…"};minuteLog.unshift(now);minuteLog.length=Math.min(minuteLog.length,120);evalSig();
+ if(q){const db=now.b-q.b,dr=now.r-q.r;say(` Minuto a minuto: hace 1 min tenía ${q.b}% de compra y ahora ${now.b}% (${db>=0?"+":""}${db}). RSI ${q.r.toFixed(0)} → ${now.r.toFixed(0)}. ${Math.abs(db)>=12?"Cambio importante, vigílalo.":"Sin cambios bruscos."} Dossier ${Math.round(fresh(cur)*100)}% fresco.`,Math.abs(db)>=12?"alert":"scan")}
+ if(tab===7)tb(7)}
+setInterval(()=>{if(cur&&stream&&A&&A.ok)minute()},60000);
+/* ---- zona automática y reescala ---- */
+function autoRoi(){const kp=AR;AR=null;const E0=extract();AR=kp;if(!E0||E0.cs.length<8)return;const cs=E0.cs.slice().sort((a,b)=>a.x-b.x),sp=[];for(let i=1;i<cs.length;i++)sp.push(cs[i].x-cs[i-1].x);sp.sort((a,b)=>a-b);const ms=sp[Math.floor(sp.length/2)]||6;
+ let ch=[],best=null,sc=0;const fin=()=>{const s=ch.reduce((a,c)=>a+(c.yl-c.yh),0);if(ch.length>=8&&s>sc){sc=s;best=ch}};cs.forEach((c,i)=>{if(i&&c.x-cs[i-1].x>ms*4){fin();ch=[]}ch.push(c)});fin();if(!best)return;
+ const W=cv.width,H=cv.height,x0=Math.min(...best.map(c=>c.x))-ms,x1=Math.max(...best.map(c=>c.x))+ms,y0=Math.min(...best.map(c=>c.yh))-8,y1=Math.max(...best.map(c=>c.yl))+8,n={x0:Math.max(0,x0/W),y0:Math.max(0,y0/H),x1:Math.min(1,x1/W),y1:Math.min(1,y1/H)};
+ AR=AR?{x0:AR.x0+(n.x0-AR.x0)*.5,y0:AR.y0+(n.y0-AR.y0)*.5,x1:AR.x1+(n.x1-AR.x1)*.5,y1:AR.y1+(n.y1-AR.y1)*.5}:n}
+function rescaled(){if(!A||!A.ok||!prevC)return false;const c=A.cs,p=prevC,m=Math.min(c.length,p.length)-3;if(m<8)return false;let b=null;for(let k=0;k<=2;k++){let bad=0;const ds=[];for(let i=0;i<m;i++){const a=c[i],q=p[i+k];if(!q||a.up!==q.up)bad++;else ds.push(Math.abs(a.yc-q.yc))}if(!b||bad<b.bad)b={bad,ds}}
+ if(b.bad>m*.3||b.ds.length<5)return false;b.ds.sort((x,y)=>x-y);return b.ds[Math.floor(b.ds.length/2)]>.04*cv.height}
+var ld="";const _tick=tick;tick=function(){if(!cur||!grab())return;const dm=cv.width+"x"+cv.height;if(ld&&ld!==dm&&calibrated()){cal=[];pend=[];say("Cambió el tamaño de lo que compartes. Mi zona de velas se ajustó sola, pero borré la calibración de precios para no darte números falsos.","alert",1)}ld=dm;if(!roi)autoRoi();else AR=null;_tick();if(A&&A.ok){if(rescaled()&&calibrated()){cal=[];pend=[];say("El eje de precios cambió de escala, así que borré la calibración para no darte números falsos. Pulsa «Calibrar precios» y vuelve a poner dos precios.","alert",1)}prevC=A.cs;bsum+=A.buy;bn++}};
+/* ---- pestaña minuto a minuto ---- */
+const _tb=tb;tb=function(i){if(i!==7)return _tb(i);tab=7;[...$("#tabs").children].forEach((b,j)=>b.classList.toggle("on",j===7));const L=(prof().learn||{})[cur],a=acc(),ss=((prof().sess||{})[cur]||[]).slice(-5).reverse();
+ $("#tb").innerHTML=`<div class="g" style="margin:0"><div><h3> Cada minuto (mientras compartes)</h3>${minuteLog.length?`<table><tr><th>Hora</th><th>Señal</th><th>% compra</th><th>RSI</th><th>Velas</th></tr>${minuteLog.slice(0,30).map(x=>`<tr><td>${new Date(x.t).toLocaleTimeString("es")}</td><td class="${x.v==='COMPRAR'?'up':x.v==='VENDER'?'dn':'am'}"><b>${x.v}</b></td><td>${x.b}%</td><td>${x.r.toFixed(0)}</td><td>${x.n}</td></tr>`).join("")}</table>`:"<small>Aparecerá una fila por minuto mientras compartes tu pantalla.</small>"}</div>
+ <div><h3> Lo que he aprendido de ti</h3><p class="mu">Acierto de mis señales (con precios calibrados, a 5 min): <b>${L&&L.n?L.h+"/"+L.n+" ("+Math.round(L.h/L.n*100)+"%)":"sin datos todavía"}</b> ${a===null?"· necesito 10+ señales evaluadas para ajustar mis pesos.":"· ya ajusto el peso técnico a "+Math.round(twt()*100)+"%."}</p><h3>Sesiones guardadas</h3>${ss.length?ss.map(s=>`<p class="mu" style="margin:4px 0">${s.d} · ${s.m} min · ${s.sig} cambios · cierre <b>${s.v}</b> · ${s.b??"—"}% compra${s.ev.length?"<br><small>"+esc(s.ev.join(" · "))+"</small>":""}</p>`).join(""):"<small>Al dejar de compartir guardo un resumen breve (no las capturas).</small>"}</div></div>`};
+
+const PERS={gold:{name:"Dormilón",pitch:.7,rate:.82,blip:150,
+greet:["*bostezo largo* Buenas... me despierto solo para ti.","Mmm... ¿ya es de día? Bueno, vamos con las velas.","Hola, hola. Traje siesta y paciencia. Lo demás lo ponemos entre los dos."],
+idle:["Zzz... perdona, estaba contando monedas en sueños.","Me suena la barriga. ¿Y si no hacemos nada hasta comer? Buena estrategia.","El oro pesa mucho. Por eso yo no me muevo rápido.","*se rasca la panza* Sigo mirando. Despacito se llega lejos.","A veces el mejor trade es una buena siesta. Lo digo en serio.","Si pierdes dinero, no pierdas el sueño. Eso me lo enseñó mi almohada."],
+poke:["¡Mmmh! ¿Eh? ¿Quién toca mi barriga?","*abre un ojo* ...Cinco minutitos más.","Jeje, cosquillas no, que me rebota todo el oro."],
+buy:["Mmm... esto huele a compra, y huelo muy bien. Con stop, eh.","Me despierto del todo: las velas verdes están ganando.","Si compras, que sea con calma y con red de seguridad."],
+sell:["Uf... esto cae como yo después de comer. Cuidado con comprar ahora.","El mercado bosteza hacia abajo. Yo esperaría o vendería con stop.","Si baja, no pasa nada: la siesta es gratis y las pérdidas no."],
+wait:["Zzz... cincuenta y cincuenta. Hora de siesta, compañero.","Si ni yo veo claro, es que no hay nada claro. Esperemos.","No operar también es operar bien. Ahorras comisiones y nervios."],
+calm:["Todo tranquilo. Así me gusta el mercado: aburrido.","Sin cambios. Voy a cerrar un ojo... pero solo uno."],
+jump:["¡Eh! Eso se movió fuerte. No entres en caliente, que quema.","Mmm, salto grande. Respira. Las prisas son malas consejeras."],
+up:["Rompió una resistencia. Espera a que cierre la vela antes de celebrar.","Subió por encima del techo. Bonito, pero confirma."],
+down:["Perdió un soporte. Ojo: puede seguir bajando.","El piso se hundió un poco. Protege tu capital."],
+rsiH:["El RSI está alto: el mercado está lleno, como yo tras la cena.","Sobrecompra. Cuidado con comprar en la cima."],
+rsiL:["RSI bajo: sobreventa. Puede rebotar, pero no corras.","Está barato por un rato... aun así, espera confirmación."],
+share:["Ya veo tu pantalla. Déjame sentarme aquí a mirar las velas.","Pantalla conectada. Voy a observar con calma, vela por vela.","Mmm, qué gráfico tan bonito. Empiezo a leerlo."],
+stop:["Dejaste de compartir. Guardo lo importante y me echo una siesta.","Sesión terminada. Resumen guardado, sin sobras."],
+zoom:["Cambiaste el zoom. Me adapto, tranquilo. Dame un momento.","Se ve más grande o más pequeño. Ajusto mi mirada."],
+past:["Estás mirando el pasado. Lindo para estudiar, malo para decidir.","Moviste el gráfico hacia atrás. Congelo mi señal hasta que vuelvas."],
+live:["Volviste al presente. Retomo la señal en vivo.","Otra vez en directo. Bienvenido de vuelta."],
+resize:["Cambió el tamaño de la ventana. Reacomodo mi zona sin que hagas nada.","Más grande, más chico... yo me acomodo. Tú sigue."],
+rescale:["El eje cambió de escala. Borré la calibración para no mentirte con precios.","Ojo: el eje se reescaló. Calibra de nuevo cuando puedas."],
+closed:["El mercado está cerrado. Hasta el oro duerme... y yo con él.","Cerrado por fin de semana. Mejor descansamos."],
+open:["Oro, mi mercado. Brillante y pesado, como yo.","GOLD. Aquí me siento en casa. Veamos qué dice el metal.","Bien, trabajaremos con oro. Despacio y con buen ojo."],
+bye:["Me voy a dormir un rato. Suerte con lo tuyo, Sombra.","Yo me hago a un lado. Que te vaya bien con el bitcoin, Sombra."],
+back:["Volví. ¿Me perdí algo? ¿Hay comida?","Otra vez por aquí. Mmm, me gusta este rincón."],
+thanks:["De nada, compañero. Para eso estoy... y para dormir.","Gracias a ti. Ahora, ¿una siesta?"],
+hover:["Ese es mi mercado. Pasa, pasa.","El oro... brilla hasta cuando duermo."],
+dance:["Un bailecito lento. Así... balanceo, balanceo.","Mi baile favorito: el de la panza feliz."],
+wake:["¡Ah! ¿Qué pasó? Estoy despierto, estoy despierto."],
+pip:["Floto sobre tus ventanas. No peso nada... bueno, casi nada.","Ahora estoy arriba de todo. Me gusta la vista."],
+pipBack:["Volví a la página. Más cómodo aquí abajo."],
+walkOn:["Vamos a dar una vuelta. A mi ritmo, claro."],walkOff:["Aquí me quedo. Buen sitio."],
+login:["Bienvenido. Ponte cómodo, que el mercado no se va a ir.","Qué bueno verte. Yo ya estaba medio dormido, pero aquí estoy."]},
+btc:{name:"Sombra",pitch:1.65,rate:1.15,blip:420,
+greet:["Bu. Jeje, ¿te asusté? Soy Sombra.","Salí de la oscuridad solo para mirar velas contigo.","Entró alguien al bloque. Interesante."],
+idle:["*se ríe bajito* El mercado cree que nadie lo mira. Yo sí.","Dicen que el bitcoin nunca duerme. Yo tampoco. Somos amigos.","Mmm... hay algo raro en esa vela. Me gusta.","Si lo piensas, HODL es solo ser terco con estilo.","Jeje, ¿viste eso? No. Yo sí.","Las ballenas se mueven en silencio. Yo también."],
+poke:["¡Bu! Jajaja, me encanta asustar.","Eh, eh, que soy sombra: te atravieso la mano.","*parpadea en glitch* ¿Qué quieres, mortal?"],
+buy:["Jejeje... las sombras ven compra. Pero con stop, no seas valiente tonto.","Velas verdes: mi sonrisa se agranda. Ojo con el FOMO.","Compra posible. Entra con plan o no entres."],
+sell:["Se oscurece el panorama. Mi tipo de clima. Vender con cuidado.","Las velas rojas me hacen cosquillas. Cuidado con comprar ahora.","Si cae, no te enamores del precio. Sal con stop."],
+wait:["Cincuenta y cincuenta... ni las sombras se atreven. Esperemos.","Me escondo y observo. Sin ventaja no se salta.","Paciencia: los grandes movimientos aparecen cuando nadie mira."],
+calm:["Quietud total. Sospechoso... jeje.","Sin cambios. El mercado respira, yo vigilo."],
+jump:["Bu. Eso fue un latigazo. No entres en pánico ni en euforia.","Movimiento brusco. Las ballenas se mueven. Espera a que se calme el agua."],
+up:["Rompió resistencia. Jeje, ¿ruptura real o trampa? Confirma la vela.","Techo superado. Dicen que luna... yo digo que con stop."],
+down:["Soporte perdido. Se abre la trampilla. Protege tu capital.","Se cayó el piso. Respira, no persigas."],
+rsiH:["RSI alto: euforia en el aire. Las euforias terminan, jeje.","Sobrecompra. Cuidado con los que gritan luna."],
+rsiL:["RSI bajo: pánico en el aire. A veces rebota, a veces no.","Sobreventa. Interesante... pero sin prisa."],
+share:["Pantalla conectada. Ahora veo todo lo que tú ves. Bu.","Oh, veo tus velas. Déjame hurgar entre las sombras del gráfico.","Conexión lista. Empiezo a husmear."],
+stop:["Cortaste la transmisión. Guardo lo importante y me escondo.","Fin de sesión. Me llevo las pistas, tú el resto."],
+zoom:["Cambiaste el zoom. Me adapto: las sombras se estiran.","Más grande, más chico... no me engañas, sigo viendo."],
+past:["Estás en el pasado. Los fantasmas lo conocemos bien. Pero no decidas aquí.","Moviste el gráfico atrás. Congelo mi señal hasta que vuelvas al presente."],
+live:["De vuelta al presente. Jeje, el pasado asusta menos.","Directo otra vez. Retomo mi lectura."],
+resize:["Cambió el tamaño. Ya reubiqué mi zona sin que lo pidas.","Ventana distinta, mismo fantasma. Me acomodo."],
+rescale:["Se reescaló el eje. Borré la calibración: no miento con precios.","Eje nuevo. Calibra de nuevo y seguimos."],
+closed:["Mercado cerrado. Hasta las sombras descansan... un poquito.","Cerrado. Nada que cazar por ahora."],
+open:["Bitcoin. Mi territorio: veinticuatro horas de sombras.","BTCUSD. Aquí la noche no termina. Jeje.","Perfecto, bitcoin. Hagamos esto con inteligencia."],
+bye:["Me desvanezco... Dormilón, el oro es todo tuyo. Bu.","Me voy a las sombras. Cuida el oro, Dormilón."],
+back:["Bu. Volví. ¿Me extrañaron?","De vuelta de las sombras. ¿Qué me perdí?"],
+thanks:["Jeje, de nada. Me cae bien la gente educada.","Cuando quieras. Las sombras son leales."],
+hover:["Ese es mi mercado. Pasa con cuidado.","Bitcoin... el dinero que nunca duerme."],
+dance:["Baile glitch. Tres, dos, uno... bu.","Mis pasos favoritos: los que nadie ve."],
+wake:["Bu. ¿Me dormí? Imposible."],
+pip:["Ahora floto sobre tus ventanas. Soy un fantasma de verdad, jeje.","Arriba de todo. Desde aquí lo veo todo."],
+pipBack:["Regresé a la página. Se me hace cómodo."],
+walkOn:["Voy a patrullar la zona."],walkOff:["Me quedo aquí vigilando."],
+login:["Bu. Bienvenido al lado oscuro del gráfico. Hay buenas velas.","Jeje, llegaste. Ahora sí empieza lo divertido."]}};
+const DUO=[
+[["gold","Mmm... ¿ya dormiste, Sombra?","neutral"],["btc","Yo no duermo. Soy bitcoin, soy veinticuatro horas.","happy"],["gold","Qué cansado suena eso. Yo duermo y mi oro sigue aquí.","happy"],["btc","Jeje, el oro es aburrido... pero confiable.","love"]],
+[["btc","Bu.","happy"],["gold","¡Mmmh! ¡No hagas eso, que me da un susto en la panza!","alert"],["btc","Jajaja. Es mi deporte favorito.","happy"],["gold","Mmm... me vengaré con una siesta encima de ti.","think"]],
+[["gold","Mira esos mercados de ahí. ¿A cuál eliges, compañero?","think"],["btc","Elige el bitcoin. Es más emocionante. Jeje.","happy"],["gold","O el oro, que es más tranquilo y no te quita el sueño.","happy"],["btc","Cada quien con su estilo. Yo el vértigo, tú la calma.","neutral"]],
+[["btc","Regla número uno: nunca arriesgues más del uno o dos por ciento.","think"],["gold","Y la dos: si no ves claro, siesta.","sleep"],["btc","La tres: pon siempre un stop. Siempre. Hasta en sueños.","alert"],["gold","Zzz... eso. Eso mismo.","sleep"]],
+[["gold","El oro lleva miles de años siendo valioso.","happy"],["btc","El bitcoin lleva diecisiete y ya te alcanza. Jeje.","happy"],["gold","Mmm, los años no se ganan con velocidad.","think"],["btc","Pero los gráficos sí se ven más bonitos con velocidad.","love"]],
+[["gold","Tengo hambre. ¿Tú qué comes, Sombra?","neutral"],["btc","Datos. Y un poco de miedo ajeno.","happy"],["gold","Eso no llena. Yo prefiero bayas.","sad"],["btc","Las bayas no tienen halving. Los datos sí.","think"]],
+[["btc","¿Sabes cuál es el mejor indicador?","think"],["gold","¿El RSI? ¿Las medias?","think"],["btc","La paciencia. Nadie la pone en los gráficos.","happy"],["gold","Esa me gusta. Voy a dormirla un poco.","sleep"]]];
+
+function place(){}
+/* ===== v7: pixel art, mascotas por mercado, cuentas con servidor opcional ===== */
+var DB=null,UID=null,ME=null,ADM=false,P={},quiet=false,Qd=[],hideT=null,sndOn=true,PIPK=null,SPRU={},WT={t:.55,d:.3,v:.15,n:.1},V0=null,W0=null,pastUntil=0,PASTMODE=false,dbOK=true,duoT=null,wanderT=null,pushT=null,mut=false;
+try{const w=JSON.parse(localStorage.getItem("hx_w")||"null");if(w)WT=w}catch(e){}
+["gold","btc"].forEach(k=>{try{const v=localStorage.getItem("hx_spr_"+k);if(v)SPRU[k]=v}catch(e){}});
+const rnd=a=>a[Math.floor(Math.random()*a.length)],sleep=ms=>new Promise(r=>setTimeout(r,ms)),pl=(e,w)=>{const a=(PERS[w||AP()]||{})[e];return a?rnd(a):""};
+function AP(){return cur||"gold"}
+/* ---- pixel art ---- */
+const K="#0a0612",rx=l=>l.map(r=>`<rect x="${r[0]}" y="${r[1]}" width="${r[2]}" height="${r[3]}" fill="${r[4]}"/>`).join(""),ol=l=>l.map(r=>`<rect x="${r[0]-1}" y="${r[1]-1}" width="${r[2]+2}" height="${r[3]+2}" fill="${K}"/>`).join("");
+const SPR={gold:{ec:"#5a3410",body:[[11,6,6,6,"#a8741a"],[31,6,6,6,"#a8741a"],[10,10,28,16,"#e0a526"],[13,11,22,3,"#f6d36b"],[13,16,22,10,"#fdf0d5"],[6,26,36,17,"#e0a526"],[12,27,24,15,"#fdf0d5"],[12,38,24,4,"#ecd9b0"],[7,41,13,6,"#fdf0d5"],[28,41,13,6,"#fdf0d5"],[11,43,5,3,"#7a4a1a"],[32,43,5,3,"#7a4a1a"]],aL:[[2,24,6,13,"#a8741a"],[2,36,2,2,"#fff"],[5,36,2,2,"#fff"]],aR:[[40,24,6,13,"#a8741a"],[42,36,2,2,"#fff"],[45,36,2,2,"#fff"]]},
+btc:{ec:"#ff8a1f",body:[[6,3,4,4,"#2b1750"],[8,7,6,7,"#2b1750"],[38,3,4,4,"#2b1750"],[34,7,6,7,"#2b1750"],[19,6,3,4,"#2b1750"],[25,4,3,6,"#2b1750"],[30,6,3,4,"#2b1750"],[11,10,26,17,"#1a0b2e"],[11,26,26,16,"#1a0b2e"],[11,28,2,12,"#6d28d9"],[35,30,2,10,"#6d28d9"],[13,41,8,4,"#2b1750"],[27,41,8,4,"#2b1750"]],aL:[[4,28,7,9,"#2b1750"],[3,36,2,2,"#2b1750"],[6,37,2,2,"#2b1750"]],aR:[[37,28,7,9,"#2b1750"],[41,37,2,2,"#2b1750"],[44,36,2,2,"#2b1750"]]}};
+const HRT=[[15,18,2,1,"#ff5fa0"],[18,18,2,1,"#ff5fa0"],[15,19,5,1,"#ff5fa0"],[16,20,3,1,"#ff5fa0"],[17,21,1,1,"#ff5fa0"]];
+const EYE={gold:{n:[[15,19,6,1]],h:[[15,20,2,1],[17,19,2,1],[19,20,2,1]],s:[[15,19,2,1],[17,20,2,1],[19,19,2,1],[16,21,1,2,"#6cf"]],w:[[16,18,3,3],[17,19,1,1,"#fff"]],z:[[15,20,6,1]],l:HRT,a:[[15,18,2,1],[17,19,2,1],[19,20,2,1]],t:[[16,18,5,1]]},
+btc:{n:[[14,16,3,2],[17,17,3,2],[19,18,2,2]],h:[[14,19,2,1],[16,18,3,1],[19,19,2,1]],s:[[14,18,2,1],[16,19,3,1],[19,18,2,1]],w:[[15,17,4,4],[16,18,2,2,K]],z:[[14,19,6,1]],l:HRT,a:[[14,15,3,2],[17,17,3,2],[19,19,2,2]],t:[[15,16,3,2],[18,17,3,2],[20,18,2,2]]}};
+const DM="#7a2f2f",MOU={gold:{n:[[21,23,6,1,DM]],h:[[20,22,8,1,DM],[21,23,6,2,"#f2a0aa"]],s:[[21,24,6,1,DM],[20,25,1,1,DM],[27,25,1,1,DM]],w:[[22,22,4,4,DM],[23,23,2,2,"#f2a0aa"]],z:[[22,23,4,1,DM]],l:[[20,22,8,1,DM],[21,23,6,2,"#f2a0aa"]],a:[[21,24,6,1,DM]],t:[[22,23,4,1,DM]]},
+btc:{n:[[13,23,22,6,K],[14,24,20,4,"#fff"],[18,24,1,4,K],[23,24,1,4,K],[28,24,1,4,K]],h:[[12,22,24,8,K],[13,23,22,6,"#fff"],[17,23,1,6,K],[22,23,1,6,K],[26,23,1,6,K],[31,23,1,6,K]],s:[[17,25,14,2,"#fff"],[16,26,1,1,"#fff"],[31,26,1,1,"#fff"]],w:[[20,23,8,7,K],[21,24,6,5,"#5a1030"]],z:[[18,25,12,1,"#fff"]],l:[[12,22,24,8,K],[13,23,22,6,"#fff"],[17,23,1,6,K],[22,23,1,6,K],[26,23,1,6,K],[31,23,1,6,K]],a:[[14,24,20,3,K],[15,25,18,1,"#fff"]],t:[[20,25,8,1,"#fff"]]}};
+const mir=l=>l.map(r=>[48-r[0]-r[2],r[1],r[2],r[3],r[4]]);
+function eyesM(k,c){const E=SPR[k].ec,L=(EYE[k][c]||EYE[k].n).map(r=>[r[0],r[1],r[2],r[3],r[4]||E]);return rx(L)+rx(mir(L))}
+function sprite(k,m){if(SPRU[k])return `<img class="spr" src="${SPRU[k]}" alt="">`;const c=CODE[m]||"n",s=SPR[k];return `<svg class="spr" viewBox="0 0 48 48" shape-rendering="crispEdges"><g class="body">${ol(s.body)}${rx(s.body)}</g><g class="armL">${ol(s.aL)}${rx(s.aL)}</g><g class="armR">${ol(s.aR)}${rx(s.aR)}</g><g class="eyes">${eyesM(k,c)}</g><g class="mouth">${rx(MOU[k][c]||MOU[k].n)}</g></svg>`}
+function pix(rows,pal,s){const o=[];rows.forEach((r,y)=>[...r].forEach((c,x)=>{if(pal[c])o.push(`<rect x="${x}" y="${y}" width="1" height="1" fill="${pal[c]}"/>`)}));return `<svg viewBox="0 0 ${rows[0].length} ${rows.length}" width="${rows[0].length*s}" height="${rows.length*s}" shape-rendering="crispEdges" style="image-rendering:pixelated">${o.join("")}</svg>`}
+const COIN=["..oooooo..",".oYYYYYYo.","oYLLYYYYYo","oYLYYYYYYo","oYYYYYYYYo","oYYYYYYYYo","oYYYYYYYYo","oYYYYYYYYo",".oYYYYYYo.","..oooooo.."],BCOIN=["..oooooo..",".oOOOOOOo.","oOOwwwwOOo","oOOwOOwOOo","oOOwwwwOOo","oOOwOOwOOo","oOOwwwwOOo","oOOOOOOOOo",".oOOOOOOo.","..oooooo.."],STAR=["...w...","...w...","wwwwwww",".wwwww.","..www..",".ww.ww.","w.....w"];
+const pixIcon=k=>pix(k==="gold"?COIN:BCOIN,{o:"#3a1a00",Y:"#f6c13a",L:"#fff3b0",O:"#ff8a1f",w:"#fff"},6);
+/* ---- nube pixel del login ---- */
+function buildCloud(){const c=[[10,22,40,12,"#f4f0ff"],[6,26,48,10,"#f4f0ff"],[16,12,14,14,"#f4f0ff"],[26,8,18,18,"#f4f0ff"],[38,14,12,12,"#f4f0ff"],[8,32,44,4,"#cbb8ff"]];$("#cb").innerHTML=ol(c)+rx(c)}
+var cdx=0,cdy=0,cm="happy";
+function cloud(dx,dy,m){cdx=dx||0;cdy=dy||0;cm=m||cm;$("#cle").setAttribute("transform",`translate(${Math.round(cdx/5)} ${Math.round(cdy/5)})`);const M_={happy:[[24,29,1,1],[25,30,8,1],[33,29,1,1]],sad:[[24,31,1,1],[25,30,8,1],[33,31,1,1]],o:[[27,29,4,4]]}[cm]||[];$("#clm").innerHTML=M_.map(r=>`<rect x="${r[0]}" y="${r[1]}" width="${r[2]}" height="${r[3]}" fill="#0a0612"/>`).join("")}
+function cloudCls(c,ms){const e=$("#cloudL");["type","shy","err","ok"].forEach(x=>e.classList.remove(x));void e.getBBox;if(c){e.classList.add(c);if(ms)setTimeout(()=>e.classList.remove(c),ms)}$("#cbl").setAttribute("opacity",c==="shy"||c==="ok"?"1":"0")}
+function abub(t){$("#abub").textContent=t}
+function rain(){$("#rain").innerHTML=Array.from({length:8},(_,i)=>`<i style="left:${i*12}%;animation-delay:${i*.07}s"></i>`).join("");setTimeout(()=>$("#rain").innerHTML="",1600)}
+/* ---- dialogo estilo juego viejo ---- */
+function blip(w){if(!sndOn||mut)return;try{const c=bc||(bc=new(window.AudioContext||window.webkitAudioContext)()),o=c.createOscillator(),g=c.createGain();o.type="square";o.frequency.value=PERS[w].blip+Math.random()*30;o.connect(g);g.connect(c.destination);g.gain.setValueAtTime(.03,c.currentTime);g.gain.exponentialRampToValueAtTime(.001,c.currentTime+.05);o.start();o.stop(c.currentTime+.06)}catch(e){}}
+function speak(t,w){try{w=w||AP();const u=new SpeechSynthesisUtterance(t.replace(/[*]/g,""));const v=VS.length?VS[(vsel+(w==="btc"?1:0))%VS.length]:null;if(v){u.voice=v;u.lang=v.lang}else u.lang="es-ES";u.pitch=PERS[w].pitch;u.rate=PERS[w].rate;u.onend=()=>{if(hf&&!Qd.length&&!listening)setTimeout(mic,400)};speechSynthesis.speak(u)}catch(e){}}
+function say(t,m,pr,who){if(quiet||!t)return;who=who||AP();if(!P[who]||P[who].away)who=Object.keys(P).find(k=>P[k]&&!P[k].away)||who;t=String(t).replace(/Nubi/g,PERS[who].name);LOG.push([new Date().toLocaleTimeString("es"),PERS[who].name+": "+t]);if(LOG.length>150)LOG.shift();if(tab===6&&cur)tb(6);if(pr){Qd=[];tok++;try{speechSynthesis.cancel()}catch(e){}}Qd.push({w:who,t,m});lastSay=lastAct=Date.now();if(!$("#dt").dataset.busy||pr)nx()}
+const sayAs=(w,t,m,pr)=>say(t,m,pr,w);
+function nx(){const e=$("#dt"),d=$("#dlg");if(!Qd.length){e.dataset.busy="";clearTimeout(hideT);hideT=setTimeout(()=>{d.classList.add("hide");Object.values(P).forEach(p=>p.el.classList.remove("talk"))},3000);return}e.dataset.busy="1";clearTimeout(hideT);const it=Qd.shift(),my=++tok,p=P[it.w];d.classList.remove("hide");$("#dn").textContent=PERS[it.w].name;e.textContent="";Object.values(P).forEach(q=>q.el.classList.remove("talk"));if(it.m)setMoodOf(it.w,it.m);p&&p.el.classList.add("talk");if(voice)speak(it.t,it.w);let i=0;
+ (function s(){if(my!==tok)return;i++;e.textContent=it.t.slice(0,i);if(i%3===0)blip(it.w);if(i<it.t.length)setTimeout(s,24);else{p&&p.el.classList.remove("talk");setTimeout(()=>{if(my===tok)nx()},voice?Math.max(1600,it.t.length*52):Math.min(5600,1700+it.t.length*30))}})()}
+/* ---- mascotas ---- */
+const homeXY=k=>({x:k==="gold"?24:Math.max(24,innerWidth-190),y:Math.max(120,innerHeight-270)}),mktXY=()=>({x:Math.max(24,innerWidth-190),y:Math.max(120,innerHeight-270)});
+function place_(k,x,y,ms){const p=P[k];if(!p)return;const dx=x-p.x;p.x=x;p.y=y;if(Math.abs(dx)>6)p.el.classList.toggle("flip",dx<0);p.el.style.transition=ms?`transform ${ms}ms linear`:"none";p.el.style.transform=`translate(${x}px,${y}px)`;if(ms){p.el.classList.add("walk");clearTimeout(p.wt);p.wt=setTimeout(()=>p.el.classList.remove("walk"),ms)}p.el.classList.toggle("up",y>innerHeight-330)}
+function moveTo(k,x,y,speed){const p=P[k];if(!p)return;x=Math.max(8,Math.min(innerWidth-170,x));y=Math.max(70,Math.min(innerHeight-250,y));const d=Math.hypot(x-p.x,y-p.y);place_(k,x,y,Math.max(400,d/(speed||.09)))}
+function setMoodOf(k,m){const p=P[k];if(!p)return;p.mood=m;const c=CODE[m]||"n";p.el.classList.toggle("sleep",m==="sleep");p.el.classList.toggle("look",m==="scan");if(!SPRU[k]){p.el.querySelector(".eyes").innerHTML=eyesM(k,c);p.el.querySelector(".mouth").innerHTML=rx(MOU[k][c]||MOU[k].n)}}
+function setMood(m){mood=m;setMoodOf(AP(),m)}
+function emote(k,t){const p=P[k];if(!p)return;const e=document.createElement("span");e.className="em";e.textContent=t;p.el.querySelector(".pw").appendChild(e);setTimeout(()=>e.remove(),1500)}
+function puff(k){const p=P[k];if(!p)return;for(let i=0;i<14;i++){const e=document.createElement("i");e.className="pf";e.style.cssText=`left:76px;top:80px;--dx:${(Math.random()-.5)*160}px;--dy:${(Math.random()-.5)*160}px;background:${i%2?"#fff":"#a855f7"}`;p.el.appendChild(e);setTimeout(()=>e.remove(),700)}}
+function mkPet(k){const el=document.createElement("div");el.className="pet";el.innerHTML=`<div class="pw"><span class="zz">z Z</span>${sprite(k,"happy")}</div><i class="pbar" data-a="open"></i><div class="pmenu"><div class="mn">${PERS[k].name}</div><button data-a="talk">Hablar</button><button data-a="roam">Pasear / Parar</button><button data-a="dance">Bailar</button><button data-a="nap">Dormir / Despertar</button><button data-a="pip">Flotar</button><button data-a="home">Volver a su lugar</button><button data-a="voice">Voz on/off</button><button data-a="snd">Sonido on/off</button><button data-a="sprite">Sprite propio</button><button data-a="unsprite">Sprite original</button><div class="qr"><input type="text" placeholder="Escribe..." maxlength="140"><button class="btn" data-a="mic">MIC</button></div><input type="file" accept="image/*" hidden></div>`;$("#world").appendChild(el);P[k]={k,el,x:0,y:0,mood:"happy",roam:false,away:false};
+ el.addEventListener("click",e=>{const b=e.target.closest("[data-a]");if(b)return act(k,b.dataset.a,el);if(e.target.closest(".pw")){emote(k,"!");say(pl("poke",k),"love",1,k)}});
+ el.querySelector(".qr input").addEventListener("keydown",e=>{if(e.key==="Enter"){const v=e.target.value;e.target.value="";ask(v)}});
+ el.querySelector("input[type=file]").addEventListener("change",e=>{const f=e.target.files[0];if(f)setSpr(k,f)});
+ const h=homeXY(k);place_(k,h.x,h.y,0)}
+function act(k,a,el){const p=P[k];if(a==="open")el.classList.toggle("open");
+ if(a==="talk"){el.querySelector(".qr input").focus();say(rnd(["Dime, te escucho.","¿Qué quieres saber del mercado?","Pregunta lo que quieras, o dale a MIC y háblame."]),"happy",1,k)}
+ if(a==="roam"){p.roam=!p.roam;say(pl(p.roam?"walkOn":"walkOff",k),"happy",1,k);if(p.roam)wander(k,true)}
+ if(a==="dance"){el.classList.add("dance");setMoodOf(k,"love");say(pl("dance",k),"love",1,k);setTimeout(()=>{el.classList.remove("dance");setMoodOf(k,"happy")},3600)}
+ if(a==="nap"){const z=p.mood==="sleep";setMoodOf(k,z?"wow":"sleep");if(z)say(pl("wake",k),"wow",1,k);else{emote(k,"z");p.roam=false}}
+ if(a==="pip")pip(k);if(a==="home"){if(PW)PW.close();const h=cur?mktXY():homeXY(k);p.roam=false;moveTo(k,h.x,h.y,.2);say("De vuelta a mi lugar.","happy",1,k)}
+ if(a==="voice")togVoice();if(a==="snd"){sndOn=!sndOn;say(sndOn?"Sonido activado.":"Sonido apagado.","neutral",1,k)}
+ if(a==="sprite")el.querySelector("input[type=file]").click();
+ if(a==="unsprite"){delete SPRU[k];try{localStorage.removeItem("hx_spr_"+k)}catch(e){}el.querySelector(".pw").innerHTML=`<span class="zz">z Z</span>${sprite(k,p.mood)}`;say("Volví a mi aspecto original.","happy",1,k)}
+ if(a==="mic"){mic()}}
+function setSpr(k,f){const r=new FileReader();r.onload=()=>{const im=new Image();im.onload=()=>{const c=document.createElement("canvas"),s=Math.min(1,160/Math.max(im.width,im.height));c.width=Math.round(im.width*s);c.height=Math.round(im.height*s);c.getContext("2d").drawImage(im,0,0,c.width,c.height);SPRU[k]=c.toDataURL("image/png");try{localStorage.setItem("hx_spr_"+k,SPRU[k])}catch(e){}P[k].el.querySelector(".pw").innerHTML=`<span class="zz">z Z</span>${sprite(k,P[k].mood)}`;say("¿Me veo bien con mi nuevo aspecto? Solo cambia la imagen: mis gestos serán movimientos.","wow",1,k)};im.src=r.result};r.readAsDataURL(f)}
+function wander(k,force){const p=P[k];if(!p||p.away||PW&&PIPK===k||p.mood==="sleep"||p.el.classList.contains("dance"))return;const home=!cur;if(!(force||p.roam||home))return;moveTo(k,40+Math.random()*(innerWidth-240),innerHeight*.35+Math.random()*(innerHeight*.5-170))}
+function loop(){clearInterval(wanderT);wanderT=setInterval(()=>{["gold","btc"].forEach(k=>{if(P[k]&&Math.random()<(cur?.5:.55))wander(k)})},5200)}
+function duo(){clearTimeout(duoT);duoT=setTimeout(async()=>{if(!cur&&P.gold&&P.btc&&!P.gold.away&&!P.btc.away&&!Qd.length&&$("#app")&&!$("#app").classList.contains("hide")&&!PW){const d=rnd(DUO),mx=innerWidth/2-170;moveTo("gold",mx-60,innerHeight-300,.14);moveTo("btc",mx+130,innerHeight-300,.14);await sleep(1800);d.forEach(l=>sayAs(l[0],l[1],l[2]))}duo()},19000+Math.random()*9000)}
+/* ---- flotar y volver ---- */
+async function pip(k){try{if(PW){PW.close();return}if(!window.documentPictureInPicture)throw 0;const w=await documentPictureInPicture.requestWindow({width:430,height:420});[...document.querySelectorAll("link[rel=stylesheet]")].forEach(l=>w.document.head.appendChild(l.cloneNode()));[...document.styleSheets].forEach(s=>{try{const t=document.createElement("style");t.textContent=[...s.cssRules].map(r=>r.cssText).join("");w.document.head.appendChild(t)}catch(e){}});
+ w.document.documentElement.setAttribute("data-theme","dark");w.document.body.style.cssText="margin:0;background:#0a0612;overflow:hidden";const wrap=w.document.createElement("div");wrap.style.cssText="position:relative;height:100vh";const bk=w.document.createElement("button");bk.className="btn p";bk.textContent="Volver a la página";bk.style.cssText="position:absolute;left:8px;top:8px;z-index:9";bk.addEventListener("click",()=>w.close());wrap.appendChild(bk);w.document.body.appendChild(wrap);
+ const p=P[k];p._x=p.x;p._y=p.y;p.el.style.transition="none";p.el.style.transform="translate(130px,70px)";wrap.appendChild(p.el);wrap.appendChild($("#dlg"));PW=w;PIPK=k;
+ const n=$("#pipnote");n.classList.remove("hide");w.addEventListener("pagehide",()=>{PW=null;PIPK=null;n.classList.add("hide");$("#world").appendChild(p.el);document.body.appendChild($("#dlg"));const h=cur?mktXY():homeXY(k);place_(k,h.x,h.y,0);say(pl("pipBack",k),"happy",1,k)});say(pl("pip",k),"wow",1,k)}catch(e){say("Tu navegador no permite la ventana flotante. Funciona en Chrome o Edge de escritorio, con la página abierta en su propia pestaña.","sad",1)}}
+/* ---- mercados: uno se queda, el otro se va ---- */
+const _openM=openM,_back=back;
+openM=async function(k){const o=k==="gold"?"btc":"gold";quiet=true;_openM(k);quiet=false;clearTimeout(duoT);Qd=[];tok++;
+ if(P[o]&&!P[o].away){sayAs(o,pl("bye",o),"happy",1);await sleep(2300);if(cur===k){puff(o);P[o].el.classList.add("poof");await sleep(520);P[o].away=true;P[o].el.classList.add("away");P[o].el.classList.remove("poof")}}
+ if(cur!==k)return;const m=mktXY();moveTo(k,m.x,m.y,.25);P[k].el.classList.add("jump");setTimeout(()=>P[k].el.classList.remove("jump"),600);sayAs(k,pl("open",k),"happy",1);
+ if(isClosed(k))sayAs(k,pl("closed",k),"sleep");sayAs(k,k==="gold"?"Comparte tu pantalla con el gráfico de XM y empiezo a leer las velas.":"Comparte tu pantalla con el gráfico de XM y me meto a husmear entre las velas.","scan");const pr=lsGet("hx_"+k)[0];if(pr)sayAs(k,`La última vez que lo vimos (${new Date(pr.t).toLocaleString("es")}) la señal era ${pr.v} con ${pr.b}% de compra.`,"think");
+ adminTabBtn()};
+back=async function(){const k=cur;quiet=true;_back();quiet=false;const o=k==="gold"?"btc":"gold";if(PW)PW.close();if(k&&P[k]){const h=homeXY(k);moveTo(k,h.x,h.y,.25)}
+ if(P[o]){P[o].away=false;P[o].el.classList.remove("away");P[o].el.classList.add("pin");const h=homeXY(o);place_(o,h.x,h.y,0);puff(o);setTimeout(()=>P[o].el.classList.remove("pin"),600);sayAs(o,pl("back",o),"happy",1)}
+ if(k)sayAs(k,pl("hover",k)?"Volvamos al inicio. Elige otro mercado cuando quieras.":"","happy");duo()};
+/* ---- vigilar zoom, desplazamiento y tamano ---- */
+function matchShift(a,b){let best={k:0,n:0};for(let k=-14;k<=14;k++){let m=0,t=0;for(let i=0;i<a.length;i++){const q=b[i+k];if(!q)continue;t++;if(q.up===a[i].up)m++}if(t>=15&&m/t>=.85&&m>best.n)best={k,n:m}}return best}
+const med=a=>{const s=[...a].sort((x,y)=>x-y);return s[Math.floor(s.length/2)]||0};
+function watchView(){if(!A||!A.ok||!cur)return;const cs=A.cs,xs=cs.map(c=>c.x),sp=med(xs.slice(1).map((x,i)=>x-xs[i])),dm=cv.width+"x"+cv.height,now=Date.now();
+ if(V0&&W0){const sameD=dm===V0.dm;if(sameD&&V0.sp&&Math.abs(sp/V0.sp-1)>.18&&now-V0.zt>6000){sayAs(cur,pl("zoom"),"scan",1);emote(cur,"?");V0.zt=now;calKeep()}
+  const sh=matchShift(W0,cs);if(sameD&&Math.abs(sh.k)>2&&sh.n>=15&&now>pastUntil){pastUntil=now+25000;PASTMODE=true;sayAs(cur,pl("past"),"think",1);emote(cur,"...")}
+  if(PASTMODE&&now>pastUntil){PASTMODE=false;sayAs(cur,pl("live"),"happy",1)}
+  if(!sameD)sayAs(cur,pl("resize"),"scan",1)}
+ V0={sp,dm,zt:(V0&&V0.zt)||0};W0=cs}
+function calKeep(){}
+const _tick7=tick;tick=function(){_tick7();watchView()};
+const _verd=verdict;verdict=function(){return(PASTMODE?'<div class="fb">Estás viendo otra parte del gráfico: no tomes esta señal como en vivo.</div>':"")+_verd()};
+function react(Pv){if(!A||!A.ok||!Pv||!Pv.ok||Date.now()-lastReact<12000)return;const a=A;let m=null;
+ if(Math.abs(a.last-Pv.last)>1.8*a.atr)m=["jump","alert","!!"];else if(Pv.R[0]!==undefined&&Pv.last<Pv.R[0]&&a.last>Pv.R[0])m=["up","wow","!"];else if(Pv.S[0]!==undefined&&Pv.last>Pv.S[0]&&a.last<Pv.S[0])m=["down","alert","!"];else if(Pv.rsi<70&&a.rsi>=70)m=["rsiH","think","?"];else if(Pv.rsi>30&&a.rsi<=30)m=["rsiL","think","?"];
+ if(m){lastReact=Date.now();events.push(pl(m[0]).slice(0,60));sayAs(AP(),pl(m[0]),m[1],1);emote(AP(),m[2])}}
+function periodic(){const a=A;if(!a)return;const r=Math.random();if(r<.35)sayAs(AP(),`Sigo vigilando ${M[cur].p}: ${vd}, ${a.buy}% compra, RSI ${a.rsi.toFixed(0)}, ${a.n} velas.`,vd==="COMPRAR"?"happy":vd==="VENDER"?"sad":"neutral");else if(r<.65)sayAs(AP(),pl("idle"),"neutral");else if(r<.85)sayAs(AP(),pl("calm"),"scan");else sayAs(AP(),rnd(TIPS),"happy")}
+const _share7=share;share=async function(){await _share7();if(stream){const el=P[cur]&&P[cur].el;if(el){const c=cv.getBoundingClientRect();moveTo(cur,Math.max(8,c.left+10),Math.min(innerHeight-250,Math.max(80,c.bottom-190)),.3);el.classList.add("jump");setTimeout(()=>el.classList.remove("jump"),600);emote(cur,"!");sayAs(cur,pl("share"),"scan",1)}}};
+const _stop7=stopShare;stopShare=function(){const was=!!stream;_stop7();if(was&&cur){sayAs(cur,pl("stop"),"sleep",1);const m=mktXY();moveTo(cur,m.x,m.y,.2)}};
+function ant(){if(!cur||!P[cur])return;const b=P[cur].el.querySelector(".pbar");if(b)b.style.background=vd==="COMPRAR"?"#5af2a0":vd==="VENDER"?"#ff5d73":valid<need?"#7c3aed":"#ffd25a"}
+/* ---- voz ---- */
+function mic(){const SR=window.SpeechRecognition||window.webkitSpeechRecognition,k=AP();if(!SR){say("Tu navegador no tiene reconocimiento de voz (usa Chrome o Edge). Puedes escribirme en el menú de abajo del personaje.","sad",1);return}if(listening){try{rec.stop()}catch(e){}return}
+ if(!voice)togVoice();try{speechSynthesis.cancel()}catch(e){}rec=new SR();rec.lang="es-ES";rec.interimResults=true;rec.continuous=false;rec.onstart=()=>{listening=true;setMoodOf(k,"listen");emote(k,"...")};
+ rec.onresult=e=>{const t=[...e.results].map(r=>r[0].transcript).join(" ");if(e.results[e.results.length-1].isFinal)ask(t)};
+ rec.onerror=e=>{listening=false;say(e.error==="not-allowed"||e.error==="service-not-allowed"?"No tengo permiso para el micrófono. Actívalo en el candado de la barra de direcciones.":e.error==="no-speech"?"No te escuché. ¿Lo intentamos otra vez?":"Hubo un problema con el micrófono.","sad",1)};rec.onend=()=>{listening=false;if(P[k]&&P[k].mood==="listen")setMoodOf(k,"neutral")};try{rec.start()}catch(e){}}
+function sendQ(){}
+
+/* ---- cuentas, servidor opcional y admin ---- */
+async function initBackend(){try{ME=await claude.use("user");if(ME){try{ADM=await ME.isOwner()}catch(e){}try{UID=await ME.id()}catch(e){}}DB=await claude.use("db")}catch(e){DB=null}calcAdm();chips();adminTabBtn()}
+function calcAdm(){if(!ME)ADM=!!USER&&U.get()._admin===USER}
+async function nameTaken(k){if(!DB)return false;try{const d=await DB.doc("names/"+k).get();return d.exists&&d.data().uid!==UID}catch(e){return false}}
+async function reserve(k,n,pr){if(!DB||!UID)return;try{await DB.doc("names/"+k).set({uid:UID,name:n,created:pr.created});await DB.doc("data/users/"+UID+"/acct").set({k,name:n,salt:pr.salt,hash:pr.hash,created:pr.created});await member(k)}catch(e){dbOK=false}}
+async function member(k){if(!DB||!UID||!dbOK)return;const p=U.get()[k];if(!p)return;try{await DB.doc("members/"+UID).set({k,name:p.name,created:p.created,last:p.last||Date.now(),logins:p.logins||0,sess:Object.values(p.sess||{}).flat().length})}catch(e){dbOK=false}}
+const _sp=saveProf;saveProf=function(p){_sp(p);clearTimeout(pushT);pushT=setTimeout(async()=>{if(DB&&UID&&dbOK){try{await DB.doc("data/users/"+UID+"/profile").set({sess:p.sess||{},learn:p.learn||{}});member(USER)}catch(e){dbOK=false}}},4000)};
+function amode(m){authMode=m;$("#tUp").classList.toggle("on",m==="up");$("#tIn").classList.toggle("on",m==="in");$("#ac2").classList.toggle("hide",m==="in");$("#at").textContent=m==="up"?"Crea tu cuenta":"Bienvenido de vuelta";$("#aerr").textContent="";abub(m==="up"?"Vamos a crear tu cuenta. ¿Cómo te llamas?":"Qué bueno verte otra vez.")}
+function aerr(t){$("#aerr").textContent=t;$("#aerr").classList.remove("shake");void $("#aerr").offsetWidth;$("#aerr").classList.add("shake");cloud(0,2,"sad");cloudCls("err",900);rain();abub("Ups... "+t)}
+async function doAuth(){const n=$("#au").value.trim(),pw=$("#ap").value,k=n.toLowerCase();let u=U.get();
+ if(!/^[a-zA-Z0-9_.-]{3,20}$/.test(n)||k[0]==="_")return aerr("el usuario debe tener 3 a 20 letras, números, . _ -");if(pw.length<6)return aerr("la contraseña necesita 6 caracteres o más");
+ if(authMode==="up"){if(u[k])return aerr("ese nombre ya está en uso: los nombres son únicos");if(await nameTaken(k))return aerr("ese nombre ya lo tiene otra persona");if(pw!==$("#ap2").value)return aerr("las contraseñas no coinciden");
+  const salt=Math.random().toString(36).slice(2)+Date.now(),first=!Object.keys(u).some(x=>x[0]!=="_");u[k]={name:n,salt,hash:await hashPw(pw,salt),created:Date.now(),sess:{},learn:{},logins:0};if(first&&!u._admin)u._admin=k;U.set(u);await reserve(k,n,u[k])}
+ else{const f=+(sessionStorage.getItem("hx_f")||0);if(f>=5)return aerr("demasiados intentos, recarga la página");
+  if(!u[k]&&DB&&UID){try{const a=await DB.doc("data/users/"+UID+"/acct").get();if(a.exists&&a.data().k===k){const d=a.data();if(d.hash===await hashPw(pw,d.salt)){const pf=await DB.doc("data/users/"+UID+"/profile").get();u=U.get();u[k]=Object.assign({name:d.name,salt:d.salt,hash:d.hash,created:d.created,sess:{},learn:{},logins:0},pf.exists?pf.data():{});U.set(u)}}}catch(e){}u=U.get()}
+  if(!u[k]||u[k].hash!==await hashPw(pw,u[k].salt)){sessionStorage.setItem("hx_f",f+1);return aerr("usuario o contraseña incorrectos")}sessionStorage.removeItem("hx_f")}
+ u=U.get();u[k].logins=(u[k].logins||0)+1;u[k].last=Date.now();U.set(u);USER=k;try{localStorage.setItem("hx_s",k)}catch(e){}cloud(0,-4,"happy");cloudCls("ok",1600);abub("Listo. Entrando...");member(k);setTimeout(enterApp,900)}
+function logout(){saveSession();try{localStorage.removeItem("hx_s")}catch(e){}location.reload()}
+async function enterApp(){$("#auth").classList.add("hide");$("#app").classList.remove("hide");calcAdm();const p=prof();$("#uc").textContent=p.name||USER;$("#h1").textContent="Hola, "+(p.name||USER);["gold","btc"].forEach(k=>{if(!P[k])mkPet(k)});
+ const ss=Object.values(p.sess||{}).flat(),L=Object.values(p.learn||{}),h=L.reduce((a,x)=>a+x.h,0),n=L.reduce((a,x)=>a+x.n,0);
+ $("#nh").innerHTML=`<div class="sd"><div class="card"><small>Sesiones guardadas</small><b>${ss.length}</b></div><div class="card"><small>Señales evaluadas</small><b>${n}</b></div><div class="card"><small>Aciertos propios</small><b>${n>=8?Math.round(h/n*100)+"%":"-"}</b></div><div class="card"><small>Ingresos</small><b>${p.logins||1}</b></div></div>`;
+ const seen={};$("#hbox").innerHTML=`<div class="sbox"><b>>> SOBRE HOWXM</b><br>Lee tu gráfico de XM, lo cruza con fuentes investigadas y te dice si conviene comprar, vender o esperar. Si el mercado está 50 y 50, te dirá que esperes. Cada fuente pierde peso con los días y yo no puedo navegar por internet desde aquí: el dossier lo refresca Claude cuando se lo pides.<br><br>(esto se puede desplazar)<br>Aquí abajo hay más texto para que la caja tenga scroll, como en las páginas de antes. Practica siempre en cuenta demo, usa stop loss y arriesga poco por operación. Nada de lo que veas aquí es asesoría financiera.</div><h3>FUENTES REVISADAS</h3><div class="tiles">${Object.values(M).flatMap(m=>m.src).filter(s=>{const w=s[0].split(/[ ·/]/)[0];return seen[w]?0:(seen[w]=1)}).map(s=>`<div class="tile"><b>${s[0].slice(0,2).toUpperCase()}</b>${esc(s[0].split(/[·(]/)[0].trim())}</div>`).join("")}</div>`;
+ document.querySelectorAll("#mc .mk").forEach((c,i)=>{const k=["gold","btc"][i];c.addEventListener("pointerenter",()=>{if(!cur&&P[k]&&Date.now()-(c._h||0)>9000){c._h=Date.now();sayAs(k,pl("hover",k),"happy");emote(k,"!");const r=c.getBoundingClientRect();moveTo(k,r.left+r.width/2-80,Math.max(80,r.top-150),.2)}})});
+ document.querySelectorAll("#mc .mk").forEach((c,i)=>{if(!c.querySelector(".pxi"))c.insertAdjacentHTML("afterbegin",`<span class="pxi" style="float:right">${pixIcon(["gold","btc"][i])}</span>`)});loop();duo();setTimeout(()=>{sayAs("gold",pl("login","gold"),"happy");sayAs("btc",pl("login","btc"),"happy")},500);
+ if(DB){try{const a=await DB.doc("config/announce").get();if(a.exists&&a.data().text)sayAs("btc","Aviso del administrador: "+a.data().text,"alert")}catch(e){}}chips();adminTabBtn()}
+function adminTabBtn(){if(!cur||!ADM)return;const t=$("#tabs");if(t&&!t.querySelector("[data-adm]")){const b=document.createElement("button");b.className="btn";b.dataset.adm="1";b.textContent="Admin";b.onclick=()=>tb(8);t.appendChild(b)}}
+const _chips=chips;chips=function(){_chips();if(ADM)$("#chips").innerHTML+='<span class="ch up">ADMIN</span>';if(PASTMODE)$("#chips").innerHTML+='<span class="ch am">VIENDO HISTORIAL</span>'};
+function twt(){const a=acc();return a===null?WT.t:WT.t+clamp((a-.5)*.3,-.1,.1)}
+const _tb7=tb;tb=function(i){if(i!==8)return _tb7(i);tab=8;[...$("#tabs").children].forEach(b=>b.classList.toggle("on",b.textContent==="Admin"));$("#tb").innerHTML="<small>Cargando...</small>";admLoad()};
+async function admLoad(){if(!ADM){$("#tb").innerHTML="<small>Solo el administrador ve esto.</small>";return}let rows=[];const u=U.get();Object.keys(u).filter(x=>x[0]!=="_").forEach(k=>rows.push({k,name:u[k].name,created:u[k].created,last:u[k].last,logins:u[k].logins||0,sess:Object.values(u[k].sess||{}).flat().length,src:"local"}));
+ if(DB){try{const q=await DB.collection("members").get();q.docs.forEach(d=>{const x=d.data();if(x&&!rows.find(r=>r.k===x.k))rows.push({k:x.k,name:x.name,created:x.created,last:x.last,logins:x.logins||0,sess:x.sess||0,src:"servidor"})})}catch(e){}}
+ const f=t=>t?new Date(t).toLocaleString("es"):"-";
+ $("#tb").innerHTML=`<div class="g" style="margin:0"><div><h3>CUENTAS (${rows.length})</h3><div class="sc"><table><tr><th>Usuario</th><th>Creada</th><th>Último</th><th>Ingresos</th><th>Sesiones</th><th>Origen</th><th></th></tr>${rows.map(r=>`<tr><td>${esc(r.name)}${r.k===USER?" (tú)":""}</td><td>${f(r.created)}</td><td>${f(r.last)}</td><td>${r.logins}</td><td>${r.sess}</td><td>${r.src}</td><td>${r.k===USER?"":`<button class="btn" onclick="delUser('${esc(r.k)}')">Borrar</button>`}</td></tr>`).join("")}</table></div><small>${DB?"Servidor conectado: los nombres son únicos para todos.":"Sin servidor: solo ves las cuentas de este navegador."} Las contraseñas nunca se muestran.</small>
+ <h3 style="margin-top:14px">ANUNCIO PARA TODOS</h3><textarea id="ann" rows="2" placeholder="Mensaje que dirán los personajes al entrar..."></textarea><div class="row"><button class="btn p" onclick="annSave()">Publicar anuncio</button><button class="btn" onclick="expAll()">Exportar datos</button></div></div>
+ <div><h3>PESOS DEL ANÁLISIS</h3>${[["t","Técnico"],["d","Dossier"],["v","Voces X/foros"],["n","Noticias"]].map(([k,l])=>`<small>${l}: <b id="wv_${k}">${WT[k].toFixed(2)}</b></small><input type="range" min="0" max="1" step=".05" value="${WT[k]}" oninput="WT.${k}=+this.value;$('#wv_${k}').textContent=this.value;try{localStorage.setItem('hx_w',JSON.stringify(WT))}catch(e){}">`).join("")}
+ <h3 style="margin-top:12px">DEPURACIÓN</h3><div class="kv"><span>Zona automática</span><b>${AR?Object.values(AR).map(v=>v.toFixed(2)).join(", "):"-"}</b><span>Lecturas</span><b>${valid}/${need}</b><span>Candidata/hold</span><b>${cand||"-"} / ${hold}</b><span>Calibrado</span><b>${calibrated()}</b><span>Tamaño captura</span><b>${cv.width}x${cv.height}</b><span>Servidor</span><b>${DB?(dbOK?"ok":"solo lectura"):"no"}</b></div></div></div>`}
+async function delUser(k){if(!ADM||!confirm("¿Borrar la cuenta "+k+"? El nombre quedará libre."))return;const u=U.get();delete u[k];U.set(u);if(DB){try{const d=await DB.doc("names/"+k).get();if(d.exists){const id=d.data().uid;await DB.doc("names/"+k).delete();await DB.doc("members/"+id).delete()}}catch(e){}}admLoad()}
+async function annSave(){const t=$("#ann").value.trim();if(!DB){say("Sin servidor no puedo compartir el anuncio con otros.","sad",1);return}try{await DB.doc("config/announce").set({text:t,t:Date.now()});say("Anuncio publicado.","happy",1)}catch(e){say("No pude publicar el anuncio: no tienes permiso de escritura.","sad",1)}}
+async function expAll(){const j=JSON.stringify(U.get(),(k,v)=>k==="hash"||k==="salt"?undefined:v,1);try{const d=await claude.use("downloads");if(d){await d.save({filename:"howxm-datos.json",data:j});return}}catch(e){}try{await navigator.clipboard.writeText(j);say("Copié los datos al portapapeles.","happy",1)}catch(e){say("No pude exportar.","sad",1)}}
+/* ---- arranque ---- */
+document.addEventListener("pointermove",e=>{if(!$("#auth").classList.contains("hide")&&!/^ap2?$/.test(document.activeElement.id)){const r=$("#cloudL").getBoundingClientRect();cloud(Math.max(-14,Math.min(14,(e.clientX-r.left-r.width/2)/40)),Math.max(-8,Math.min(8,(e.clientY-r.top-r.height/2)/40)))}});
+let aT=null;$("#au").addEventListener("input",()=>{const v=$("#au").value.trim();cloud(14,Math.min(10,v.length),"happy");cloudCls("type",260);clearTimeout(aT);aT=setTimeout(()=>abub(v.length<3?"Mmm, sigue escribiendo...":v.length<8?`Mucho gusto, ${v}.`:`Wow, ${v}. Qué nombre tan largo y especial.`),500)});
+$("#au").addEventListener("focus",()=>{cloud(14,6,"happy");cloudCls(null);abub("Escribe tu nombre de usuario.")});$("#au").addEventListener("keydown",e=>{if(e.key==="Enter")$("#ap").focus()});
+["ap","ap2"].forEach(i=>{const e=$("#"+i);e.addEventListener("focus",()=>{cloud(-22,6,"o");cloudCls("shy");abub("No miro. Esto es privado.")});e.addEventListener("input",()=>cloudCls("shy"));e.addEventListener("blur",()=>{cloud(0,0,"happy");cloudCls(null);abub("Gracias por confiar en mí.")});e.addEventListener("keydown",x=>{if(x.key==="Enter")doAuth()})});
+setInterval(()=>{if(!$("#auth").classList.contains("hide")&&Math.random()<.4)cloudCls("ok",700)},7000);
+buildCloud();cloud(0,0,"happy");
+const mqs="ULTIMA ACTUALIZACION DEL DOSSIER: 2-3 OCT 2026 >> GOLD >> BTCUSD >> LA SENAL ES UNA ESTIMACION, NO UNA GARANTIA >> PRACTICA EN CUENTA DEMO >> USA SIEMPRE STOP LOSS >> ";$("#mqt").textContent=mqs+mqs;
+for(let i=0;i<5;i++){const s=document.createElement("div");s.className="stk2";s.style.cssText=`left:${[4,92,48,80,15][i]}%;top:${[18,12,70,60,85][i]}%;animation-delay:${-i*1.7}s`;s.innerHTML=pix(STAR,{w:["#fff","#c4b5fd","#a855f7","#fff","#c4b5fd"][i]},[5,4,6,4,5][i]);document.body.appendChild(s)}
+applyChar=function(){};
+try{const s=localStorage.getItem("hx_s");if(s&&U.get()[s]){USER=s;calcAdm();enterApp()}else amode("up")}catch(e){amode("up")}
+initBackend();
+
+/* ===== v8: noticias en tiempo real (WebSocket) ===== */
+var NW={ws:null,items:[],cal:[],st:"sin servidor",fails:0,url:"",src:[],last:0,nt:null};
+try{NW.url=localStorage.getItem("hx_ws")||""}catch(e){}
+if(WT.n==null)WT.n=.1;
+const IMP={high:["ALTO","#ff5d73"],medium:["MEDIO","#ffd25a"],low:["BAJO","#8d8aa8"]},TAGM={gold:["#XAUUSD","#USD"],btc:["#BTCUSD"]};
+PERS.gold.news=["Ding dong, llegó una noticia. Respira antes de actuar.","Noticia fuerte. Mejor ver cómo reacciona el precio."];PERS.btc.news=["Bu. Noticia grande, las ballenas ya la leyeron.","Alerta de noticia. Espera a que baje el polvo."];
+function newsConnect(){clearTimeout(NW.nt);const base=NW.url||(/^https?:/.test(location.protocol)?location.origin:"");if(!base){NW.st="sin servidor";newsUi();return}
+ try{NW.ws=new WebSocket(base.replace(/^http/,"ws").replace(/\/$/,"")+"/ws")}catch(e){NW.fails++;return newsRetry()}
+ NW.st="conectando";newsUi();let ok=false;NW.ws.onopen=()=>{ok=true;NW.fails=0;NW.st="en vivo";newsUi()};
+ NW.ws.onmessage=e=>{let m;try{m=JSON.parse(e.data)}catch(x){return}if(m.type==="hello"){NW.items=m.news||[];NW.cal=m.calendar||[];NW.src=m.sources||[]}else if(m.type==="news")newsIn(m.item);else if(m.type==="calendar")NW.cal=m.calendar||[];NW.last=Date.now();newsUi()};
+ NW.ws.onclose=()=>{NW.st=ok?"reconectando":"sin servidor";if(!ok)NW.fails++;newsUi();newsRetry()};NW.ws.onerror=()=>{}}
+function newsRetry(){clearTimeout(NW.nt);NW.nt=setTimeout(newsConnect,NW.fails>=3?60000:Math.min(30000,2000*Math.pow(2,NW.fails)))}
+function newsIn(it){if(NW.items.some(x=>x.id===it.id))return;NW.items.unshift(it);NW.items.length=Math.min(NW.items.length,200);
+ const k=cur||(it.tags.includes("#BTCUSD")?"btc":"gold"),rel=cur?TAGM[cur].some(t=>it.tags.includes(t)):it.tags.some(t=>/XAU|BTC/.test(t));
+ if(rel&&it.impact==="high"&&Date.now()-(NW.alert||0)>20000&&P[k]&&!P[k].away){NW.alert=Date.now();const by=it.by[(TAGM[k]||[])[0]]??it.score;sayAs(k,pl("news",k)+` "${it.title.slice(0,110)}" (${it.source}). Tono ${by>.15?"alcista":by<-.15?"bajista":"neutral"}.`,"alert");emote(k,"!");beep("ESPERAR")}
+ const q=NW.items.slice(0,8).map(x=>x.title.slice(0,70)+" ["+x.source.split(" / ")[0]+"]").join("  >>  ");if(q)$("#mqt").textContent=(q+"  >>  ").repeat(2)}
+function newsScore(k){if(!k||!TAGM[k])return null;let a=0,b=0,n=0;const now=Date.now();NW.items.forEach(x=>{const g=TAGM[k].find(t=>x.tags.includes(t));if(!g)return;const age=(now-x.t)/6e4;if(age>180)return;const w=({high:3,medium:2,low:1}[x.impact])*Math.pow(.5,age/30);a+=(x.by[g]??x.score)*w;b+=w;n++});return n>=2&&b?clamp(a/b*1.4):null}
+function nItem(x){const im=IMP[x.impact]||IMP.low,sc=x.sent==="bullish"?"up":x.sent==="bearish"?"dn":"mu",tm=new Date(x.t).toLocaleTimeString("es",{hour:"2-digit",minute:"2-digit"});return `<div class="ni"><span class="dot" style="background:${im[1]}" title="Impacto ${im[0]}"></span><small>${tm}</small> <b class="${sc}">${x.sent==="bullish"?"ALCISTA":x.sent==="bearish"?"BAJISTA":"NEUTRAL"}</b> ${x.tags.map(t=>`<small class="tg">${esc(t)}</small>`).join(" ")}<br>${esc(x.title)}<br><small>Fuente: <a href="${esc(x.url)}" target="_blank" rel="noopener noreferrer">${esc(x.source)}</a></small></div>`}
+var NF="all";
+function newsUi(){const c=$("#nws");if(chipsN())chips();if(!c)return;const f=x=>NF==="all"||x.impact===NF,g=NW.items.filter(f).slice(0,40),a=cur?NW.items.filter(x=>TAGM[cur].some(t=>x.tags.includes(t))&&f(x)).slice(0,30):[],today=new Date().toDateString(),cal=NW.cal.filter(x=>new Date(x.t).toDateString()===today).sort((p,q)=>p.t-q.t);
+ $("#nst").innerHTML=`<span class="ch ${NW.st==="en vivo"?"up":NW.st==="sin servidor"?"dn":"am"}">Noticias: ${NW.st}</span> <small>${NW.items.length} en memoria${NW.last?" · último mensaje "+new Date(NW.last).toLocaleTimeString("es"):""}</small>`;
+ $("#nc1").innerHTML=g.length?g.map(nItem).join(""):`<small>${NW.st==="en vivo"?"Esperando noticias relevantes...":"Sin conexión al servidor de noticias."}</small>`;
+ $("#nc2").innerHTML=cal.length?cal.map(x=>`<div class="ni"><span class="dot" style="background:${IMP[x.impact][1]}"></span><small>${new Date(x.t).toLocaleTimeString("es",{hour:"2-digit",minute:"2-digit"})}</small> <b>${esc(x.country)}</b> ${esc(x.title)}<br><small>Prev: ${esc(x.previous||"-")} · Pron: ${esc(x.forecast||"-")}</small></div>`).join(""):"<small>Sin eventos de alto o medio impacto hoy, o el calendario no está activo.</small>";
+ $("#nc3").innerHTML=a.length?a.map(nItem).join(""):`<small>Sin noticias etiquetadas para ${cur?TAGM[cur].join(" / "):"este activo"} todavía.</small>`}
+function chipsN(){return false}
+function newsTab(){NW.__t=1;$("#tb").innerHTML=`<div id="nst"></div><div class="row" style="margin:6px 0"><input type="text" id="nsu" placeholder="URL del servidor (ej. https://tu-servidor.com)" value="${esc(NW.url)}" style="max-width:380px"><button class="btn" id="nsb">Conectar</button>${["all","high","medium","low"].map(i=>`<button class="btn ${NF===i?"on":""}" data-f="${i}">${i==="all"?"Todas":IMP[i][0]}</button>`).join("")}</div>
+ <div class="g3"><div><h3>GENERAL</h3><div id="nc1" class="nco"></div></div><div><h3>CALENDARIO DE HOY</h3><div id="nc2" class="nco"></div></div><div><h3>MI ACTIVO${cur?" "+TAGM[cur].join(" ").replace("#USD","").trim():""}</h3><div id="nc3" class="nco"></div></div></div>
+ <small>Impacto: <b style="color:#ff5d73">rojo alto</b>, <b style="color:#ffd25a">amarillo medio</b>, gris bajo. Etiquetas y tono (alcista/bajista) son reglas automáticas sobre el titular: orientativas, no una opinión de inversión. La información no constituye asesoramiento financiero ni recomendación de inversión. Cada noticia enlaza a su fuente original.</small>`;
+ $("#nsb").addEventListener("click",()=>{NW.url=$("#nsu").value.trim();try{localStorage.setItem("hx_ws",NW.url)}catch(e){}try{NW.ws&&NW.ws.close()}catch(e){}NW.fails=0;newsConnect()});
+ $("#tb").querySelectorAll("[data-f]").forEach(b=>b.addEventListener("click",()=>{NF=b.dataset.f;newsTab()}));newsUi()}
+const _tb9=tb;tb=function(i){if(i!==9)return _tb9(i);tab=9;[...$("#tabs").children].forEach(b=>b.classList.toggle("on",b.dataset.news==="1"));newsTab()};
+function newsTabBtn(){const t=$("#tabs");if(cur&&t&&!t.querySelector("[data-news]")){const b=document.createElement("button");b.className="btn";b.dataset.news="1";b.textContent="Noticias";b.addEventListener("click",()=>tb(9));t.appendChild(b)}}
+const _om9=openM;openM=async function(k){await _om9(k);newsTabBtn()};
+setInterval(()=>{try{if(NW.ws&&NW.ws.readyState===1)NW.ws.send('ping')}catch(e){}},240000);
+newsConnect();
+</script></body></html>

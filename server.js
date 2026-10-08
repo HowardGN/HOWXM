@@ -25,8 +25,11 @@ const srv=http.createServer((q,r)=>{const u=new URL(q.url,'http://x');if(E.ALLOW
  if(u.pathname==='/api/news'){r.setHeader('Content-Type','application/json');return r.end(JSON.stringify(store.slice(0,100)))}
  if(u.pathname==='/api/calendar'){r.setHeader('Content-Type','application/json');return r.end(JSON.stringify(cal))}
  if(u.pathname==='/healthz')return r.end('ok');
- let f=path.join(__dirname,'public',u.pathname==='/'?'index.html':path.normalize(u.pathname).replace(/^(\.\.[\/\\])+/,''));if(!f.startsWith(path.join(__dirname,'public')))return r.writeHead(403).end();
- fs.readFile(f,(e,d)=>{if(e)return r.writeHead(404).end('no encontrado');r.setHeader('Content-Type',f.endsWith('.html')?'text/html; charset=utf-8':'application/octet-stream');r.end(d)})});
+ const P1=path.join(__dirname,'public'),want=u.pathname==='/'?'index.html':path.normalize(u.pathname).replace(/^(\.\.[\/\\])+/,'');
+ const cands=[path.join(P1,want)].concat(want==='index.html'?[path.join(__dirname,'index.html')]:[]);
+ const f=cands.find(x=>x.startsWith(__dirname)&&fs.existsSync(x)&&fs.statSync(x).isFile());
+ if(!f){r.writeHead(404,{'Content-Type':'text/plain; charset=utf-8'});return r.end('HOWXM: el servidor funciona, pero falta el archivo de la pagina (index.html). Sube index.html al repositorio, dentro de la carpeta public o en la raiz.')}
+ fs.readFile(f,(e,d)=>{if(e)return r.writeHead(500).end('error');r.setHeader('Content-Type',f.endsWith('.html')?'text/html; charset=utf-8':'application/octet-stream');r.end(d)})});
 srv.on('upgrade',(q,s)=>{if(!/^\/ws/.test(q.url)||!q.headers['sec-websocket-key']||clients.size>=(+E.MAX_CLIENTS||500))return s.destroy();
  s.write('HTTP/1.1 101 Switching Protocols\r\nUpgrade: websocket\r\nConnection: Upgrade\r\nSec-WebSocket-Accept: '+crypto.createHash('sha1').update(q.headers['sec-websocket-key']+'258EAFA5-E914-47DA-95CA-C5AB0DC85B11').digest('base64')+'\r\n\r\n');
  clients.add(s);s.alive=true;send(s,{type:'hello',news:store.slice(0,80),calendar:cal,sources:status()});
@@ -46,5 +49,5 @@ if(E.POLYGON_KEY)every('Polygon',90000,async()=>{const j=JSON.parse(await get('h
 if(E.NEWSAPI_KEY)every('NewsAPI',1800000,async()=>{const j=JSON.parse(await get('https://newsapi.org/v2/everything?language=en&sortBy=publishedAt&pageSize=40&q='+encodeURIComponent('"Federal Reserve" OR bitcoin OR gold OR inflation')+'&apiKey='+E.NEWSAPI_KEY));ingest((j.articles||[]).map(x=>({title:x.title,url:x.url,summary:x.description,source:'NewsAPI / '+((x.source||{}).name||''),t:Date.parse(x.publishedAt)})))});
 if(E.CALENDAR!=='0')every('Calendario',1200000,async()=>{const j=JSON.parse(await get('https://nfs.faireconomy.media/ff_calendar_thisweek.json'));cal=j.filter(x=>/^(High|Medium)$/.test(x.impact)).map(x=>({t:Date.parse(x.date),title:x.title,country:x.country,impact:x.impact.toLowerCase(),forecast:x.forecast,previous:x.previous}));broadcast({type:'calendar',calendar:cal})});
 if(E.MOCK==='1'){const M=[['Fed signals rate cut path as inflation cools, gold rallies','Mock'],['Bitcoin ETF outflows deepen as dollar strengthens','Mock'],['US CPI beats expectations, yields jump','Mock'],['Tesla opens new factory line','Mock']];let i=0;setInterval(()=>{const m=M[i++%M.length];ingest([{title:m[0]+' #'+i,url:'https://example.com/mock/'+i,source:m[1]}])},8000)}
-srv.listen(PORT,()=>console.log('HOWXM en http://localhost:'+PORT+'  (fuentes RSS: '+RSS.length+(E.FINNHUB_KEY?', Finnhub':'')+(E.ALPHAVANTAGE_KEY?', AlphaVantage':'')+(E.POLYGON_KEY?', Polygon':'')+(E.NEWSAPI_KEY?', NewsAPI':'')+')'));
+srv.listen(PORT,()=>{console.log('Pagina (index.html): '+(fs.existsSync(path.join(__dirname,'public','index.html'))?'public/index.html':fs.existsSync(path.join(__dirname,'index.html'))?'index.html (raiz)':'NO ENCONTRADA. Archivos aqui: '+fs.readdirSync(__dirname).join(', ')));console.log('HOWXM en http://localhost:'+PORT+'  (fuentes RSS: '+RSS.length+(E.FINNHUB_KEY?', Finnhub':'')+(E.ALPHAVANTAGE_KEY?', AlphaVantage':'')+(E.POLYGON_KEY?', Polygon':'')+(E.NEWSAPI_KEY?', NewsAPI':'')+')')});
 module.exports={enrich,parseRSS};
