@@ -177,7 +177,7 @@ table,th,td{border-color:#ffffff33}.fb{border-radius:0;border:3px dashed var(--a
 </div>
 <p class="ft">La información contenida en este sitio no constituye asesoramiento financiero ni recomendación de inversión. HOWXM es informativa. La lectura de velas se hace por análisis de píxeles de lo que muestra tu pantalla y puede equivocarse; el dossier es una foto del 2 oct 2026. El trading con CFD implica alto riesgo de pérdida: usa stop loss, arriesga poco por operación y verifica precio y spread en XM antes de operar.</p></div>
 
-<div id="world"></div><div id="dlg" class="hide"><div id="dn"></div><div id="dt"></div><i class="arw"></i></div><div id="nubi"></div>
+<div id="world"></div><div id="dlg" class="hide"><div id="dn"></div><div id="dt"></div><i class="arw"></i><button class="btn p hide" id="dbtn" style="position:absolute;right:14px;top:-18px"></button></div><div id="nubi"></div>
 <script>
 const $=s=>document.querySelector(s)||(PW&&PW.document.querySelector(s)),clamp=(v,a=-1,b=1)=>Math.max(a,Math.min(b,v));
 const REF={gold:4195,btc:84700},LNK={gold:[["X: oro en vivo","https://x.com/search?q=XAUUSD%20gold&f=live"],["TradingView: ideas XAUUSD","https://www.tradingview.com/symbols/XAUUSD/ideas/"],["TradingView: noticias","https://www.tradingview.com/symbols/XAUUSD/news/"]],btc:[["X: bitcoin en vivo","https://x.com/search?q=%24BTC%20bitcoin&f=live"],["TradingView: ideas BTCUSD","https://www.tradingview.com/symbols/BTCUSD/ideas/"],["Reddit r/Bitcoin","https://www.reddit.com/r/Bitcoin/"]]};
@@ -772,7 +772,7 @@ PERS.gold.news=["Ding dong, llegó una noticia. Respira antes de actuar.","Notic
 function newsConnect(){clearTimeout(NW.nt);const base=NW.url||(/^https?:/.test(location.protocol)?location.origin:"");if(!base){NW.st="sin servidor";newsUi();return}
  try{NW.ws=new WebSocket(base.replace(/^http/,"ws").replace(/\/$/,"")+"/ws")}catch(e){NW.fails++;return newsRetry()}
  NW.st="conectando";newsUi();let ok=false;NW.ws.onopen=()=>{ok=true;NW.fails=0;NW.st="en vivo";newsUi()};
- NW.ws.onmessage=e=>{let m;try{m=JSON.parse(e.data)}catch(x){return}if(m.type==="hello"){NW.items=m.news||[];NW.cal=m.calendar||[];NW.src=m.sources||[];NW.roll=m.rollups||null;if(m.ctx&&m.ctx.syms){const f=!CX;CX=m.ctx;if(f&&cur)say(pm("ctxOn"),"happy")}}else if(m.type==="ctx"){const f=!CX;CX=m.ctx;if(f&&cur)say(pm("ctxOn"),"happy")}if(m.type==="news")newsIn(m.item);else if(m.type==="calendar")NW.cal=m.calendar||[];NW.last=Date.now();newsUi()};
+ NW.ws.onmessage=e=>{let m;try{m=JSON.parse(e.data)}catch(x){return}if(m.type==="hello"){NW.items=m.news||[];NW.cal=m.calendar||[];NW.src=m.sources||[];NW.roll=m.rollups||null;AIO.online=!!m.ai;if(m.ctx&&m.ctx.syms){const f=!CX;CX=m.ctx;if(f&&cur)say(pm("ctxOn"),"happy")}}else if(m.type==="ctx"){const f=!CX;CX=m.ctx;if(f&&cur)say(pm("ctxOn"),"happy")}if(m.type==="ai_part"){aiPart(m);return}if(m.type==="ai_state"){AIO.online=!!m.online;chips();return}if(m.type==="news")newsIn(m.item);else if(m.type==="calendar")NW.cal=m.calendar||[];NW.last=Date.now();newsUi()};
  NW.ws.onclose=()=>{NW.st=ok?"reconectando":"sin servidor";if(!ok)NW.fails++;newsUi();newsRetry()};NW.ws.onerror=()=>{}}
 function newsRetry(){clearTimeout(NW.nt);NW.nt=setTimeout(newsConnect,NW.fails>=3?60000:Math.min(30000,2000*Math.pow(2,NW.fails)))}
 function newsIn(it){if(NW.items.some(x=>x.id===it.id))return;NW.items.unshift(it);NW.items.length=Math.min(NW.items.length,200);
@@ -974,4 +974,67 @@ var LAI={};
 const _th=tabHoy;tabHoy=function(){_th();const a=CX&&CX.ai&&cur&&CX.ai[cur];if(a&&a.text)$("#tb").insertAdjacentHTML("beforeend",`<div class="card" style="margin-top:12px"><h3>ANALISTA LOCAL (IA)</h3><p>${esc(a.text)}</p><small>Texto generado por un modelo de IA que corre en tu PC (${esc(a.model||"")}), actualizado ${new Date(a.t).toLocaleTimeString("es")}. Puede equivocarse, solo describe los datos y no cambia ninguna señal.</small></div>`)};
 function aiWatch(){const a=CX&&CX.ai&&cur&&CX.ai[cur];if(!a||!a.text||LAI[cur]===a.t||document.hidden)return;LAI[cur]=a.t;sayAs(cur,"Mi analista local dice: "+a.text.slice(0,260),"think")}
 setInterval(aiWatch,25000);
+
+/* ===== v12: el bot de cada mercado = IA local; voz continua; comandos instantaneos ===== */
+var AIO={online:false,pass:"",id:0,cur:null,hist:[]},VC={on:false,rec:null,utt:0,exec:-1,cmdKey:"",cmdN:0,timer:0,paused:false,early:false};
+try{AIO.pass=localStorage.getItem("hx_aipass")||""}catch(e){}
+const nrm=t=>String(t).toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/[^a-z0-9 ]/g," ").replace(/\s+/g," ").trim();
+function lev(a,b){if(Math.abs(a.length-b.length)>2)return 9;const d=[];for(let i=0;i<=a.length;i++){d[i]=[i];for(let j=1;j<=b.length;j++)d[i][j]=i?0:j}for(let i=1;i<=a.length;i++)for(let j=1;j<=b.length;j++)d[i][j]=Math.min(d[i-1][j]+1,d[i][j-1]+1,d[i-1][j-1]+(a[i-1]===b[j-1]?0:1));return d[a.length][b.length]}
+const hw=(tk,w)=>tk.some(t=>t===w||(w.length>=5&&lev(t,w)<=1)||(w.length>=9&&lev(t,w)<=2)),hs=(tk,s)=>tk.some(t=>t.startsWith(s));
+const NAVW={noticias:9,noticia:9,estrategias:15,estrategia:15,diario:13,hoy:10,semaforo:10,playbooks:12,playbook:12,operar:11,calculadora:11,checklist:11,aprender:14,glosario:14,lectura:0,fuentes:3,datos:4,historial:5,ajustes:2};
+function parseCmd(raw){const t=nrm(raw);if(!t)return null;const tk=t.split(" "),any=(...w)=>w.some(x=>hw(tk,x)),st=(...s)=>s.some(x=>hs(tk,x));
+ const back=any("volver","vuelve","vuelva","regresa","regresar","regrese","regreses","vuelvas")||st("regres","vuelv"),place=any("lugar","sitio","posicion","pagina","inicio","casa","origen")||st("pagin");
+ if(back&&(place||PW))return{key:"home"};
+ if(st("flot")||(any("ventana")&&any("flotante")))return{key:"float"};
+ if((any("para","detente","deja","dejate","quedate","basta")&&(any("pasear","caminar","moverte","mover","quieto","pasea","camina")||st("pase")))||st("quiet"))return{key:"stay"};
+ if(st("pase","camin","recorr")||(any("da")&&any("vuelta")))return{key:"roam"};
+ if(st("bail"))return{key:"dance"};if(st("despiert","levant"))return{key:"wake"};if(st("duerm","siest","descans"))return{key:"sleep"};
+ if(any("silencio","callate","calla")||(tk.length<=2&&any("para","detente","basta")))return{key:"quiet"};
+ if((any("comparte","compartir","comparti")&&st("pantalla"))||t==="comparte pantalla")return{key:"share"};if((any("deja","detener","deten","para")&&st("compart")))return{key:"unshare"};
+ const nv=any("muestra","mostrar","abre","abrir","ve","ir","llevame","pon","ponme","dime","enseñame","ensename")||tk.length<=2;if(nv)for(const w of tk)if(NAVW[w]!==undefined&&cur)return{key:"nav",arg:NAVW[w]};
+ return null}
+const CMDL={home:["Vuelvo a mi lugar.","De vuelta a mi puesto. Bu."],float:["Intento flotar: el navegador pide que pulses el botón.","Quiero flotar. Pulsa el botón de aquí, el navegador lo exige."],roam:["Voy a dar una vuelta, despacito.","Patrullo la zona. Jeje."],stay:["Aquí me quedo quieto.","Me quedo quieto. Vigilando."],dance:["Un bailecito lento.","Baile glitch. Tres, dos, uno."],sleep:["Zzz... cinco minutitos.","Me escondo a dormir un rato."],wake:["¡Ah! Despierto, despierto.","Bu. Ya estoy despierto."],quiet:["Silencio. Me callo.","Vale, silencio."],nav:["Te lo muestro.","Aquí lo tienes."],share:["Para compartir pantalla el navegador exige que pulses el botón.","Compartir pantalla lo debes pulsar tú: es una regla del navegador."],unshare:["Dejo de mirar tu pantalla.","Corto la transmisión."]};
+var DB1=null;function askClick(label,fn){const d=$("#dlg"),b=$("#dbtn");if(!b)return;b.textContent=label;b.classList.remove("hide");b.onclick=()=>{b.classList.add("hide");fn()};d.classList.remove("hide");clearTimeout(hideT);hideT=setTimeout(()=>{d.classList.add("hide");b.classList.add("hide")},9000)}
+function execCmd(c){const k=AP(),i=k==="btc"?1:0,say_=key=>sayAs(k,CMDL[key][i],"happy",1);
+ switch(c.key){case"home":{if(PW)PW.close();const h=cur?mktXY():homeXY(k);P[k].roam=false;moveTo(k,h.x,h.y,.2);say_("home");break}
+  case"float":say_("float");askClick("Flotar ahora",()=>pip(k));break;
+  case"roam":P[k].roam=true;wander(k,true);say_("roam");break;case"stay":P[k].roam=false;say_("stay");break;
+  case"dance":act(k,"dance",P[k].el);break;case"sleep":if(P[k].mood!=="sleep")act(k,"nap",P[k].el);break;case"wake":if(P[k].mood==="sleep")act(k,"nap",P[k].el);break;
+  case"quiet":Qd=[];tok++;try{speechSynthesis.cancel()}catch(e){}if(AIO.cur)cancelAI();say_("quiet");break;
+  case"nav":say_("nav");tb(c.arg);break;case"share":say_("share");askClick("Compartir pantalla",()=>share());break;case"unshare":stopShare();say_("unshare");break}}
+/* ---- chat con la IA ---- */
+const aiReady=()=>!!cur&&AIO.online&&NW.ws&&NW.ws.readyState===1&&P[cur]&&!P[cur].away;
+function clientDigest(){const L=light(),d=discipline(),S=jStats(jGet()),sg=sgGet(),p=cur&&PRF(cur),a=cur&&advisor(cur),o={light:L.color+" ("+L.reg+")",reasons:L.R.slice(0,3).map(x=>x[1]).join("; "),checklist:ckScore()+"/7",dayPct:+d.pct.toFixed(2),streak:d.streak,pause:d.pause?"si":"no"};
+ if(S.n)o.journal=`${S.n} oper, acierto ${S.wr.toFixed(0)}%, PF ${S.pf===Infinity?"inf":S.pf.toFixed(2)}, R prom ${S.avg.toFixed(2)}, caida max ${S.dd.toFixed(1)}R`;if(sg.length)o.signals=`${sg.length} senales registradas, ${sg.filter(x=>/gan/.test(x.o)).length} ganadas, ${sg.filter(x=>/perd/.test(x.o)).length} perdidas, ${sg.filter(x=>x.o==="no la tomé").length} no tomadas`;
+ if(p)o.profile=`${p.inst}, ${p.tf}, contrato ${p.contract}`;if(A&&A.ok)o.chart=`${A.n} velas, RSI ${A.rsi.toFixed(0)}, tendencia ${A.tr>.25?"alcista":A.tr<-.25?"bajista":"sin definir"}, compra ${A.buy??"?"}%, veredicto ${vd||"recolectando"}${PASTMODE?", viendo historial":""}`;
+ if(a&&a.ok)o.advisor=a.best?`motor recomienda ${a.best.s.id}`:"motor: ninguna estrategia con senal y validacion";const sp=dataSusp(cur);if(sp)o.advisor=(o.advisor||"")+"; SENAL SUSPENDIDA: "+sp;return o}
+function aiShow(text,done){const d=$("#dlg");d.classList.remove("hide");$("#dn").textContent=PERS[AP()].name+" · IA local";$("#dt").textContent=text;$("#dt").dataset.busy="";Qd=[];tok++;const p=P[AP()];if(p)p.el.classList.toggle("talk",!done);if(done){clearTimeout(hideT);hideT=setTimeout(()=>d.classList.add("hide"),7000+text.length*45)}else clearTimeout(hideT)}
+function askAI(text){if(AIO.cur)cancelAI();const id="c"+(++AIO.id)+Date.now().toString(36);AIO.cur={id,text,acc:"",len:0};LOG.push([new Date().toLocaleTimeString("es"),"Tú: "+text]);setMoodOf(AP(),"think");aiShow("Pensando...",false);
+ try{NW.ws.send(JSON.stringify({type:"ask",id,market:cur,text,hist:AIO.hist.slice(-3),cd:clientDigest(),pass:AIO.pass}))}catch(e){AIO.cur=null;return _askOld(text)}
+ clearTimeout(AIO.tw);AIO.tw=setTimeout(()=>{if(AIO.cur&&AIO.cur.id===id&&!AIO.cur.acc)aiShow("Sigo pensando, mi PC es lenta... reviso los datos guardados.",false)},5000)}
+function cancelAI(){try{NW.ws.send(JSON.stringify({type:"ask_cancel"}))}catch(e){}AIO.cur=null;clearTimeout(AIO.tw)}
+function aiPart(m){const c=AIO.cur;if(!c||m.id!==c.id)return;clearTimeout(AIO.tw);
+ if(m.err){AIO.cur=null;const msg={auth:"La IA pide una clave. Escríbela en la pestaña Ajustes.",rapido:"Espera un par de segundos entre preguntas.",ocupado:"La IA está ocupada con otra pregunta, intenta en unos segundos."}[m.err];if(msg){aiShow(msg,true);return}aiShow("La IA no pudo responder ("+m.err+"). Te contesto con lo que sé de memoria.",true);setTimeout(()=>_askOld(c.text),400);return}
+ c.acc=m.text||c.acc;if(c.acc)aiShow(c.acc,!!m.done);const nw=c.acc.slice(c.len);if(nw.trim()&&voice){speak(nw,AP())}c.len=c.acc.length;
+ if(m.done){AIO.hist.push({r:"u",t:c.text},{r:"a",t:c.acc});AIO.hist=AIO.hist.slice(-6);LOG.push([new Date().toLocaleTimeString("es"),PERS[AP()].name+" (IA): "+c.acc]);AIO.cur=null;setMoodOf(AP(),/esperar|no hay|prudente|no estoy seguro/i.test(c.acc)?"think":"happy")}}
+const _askOld=ask;ask=async function(q){q=(q||"").trim();if(!q)return;const c=parseCmd(q);if(c){execCmd(c);return}lastAct=Date.now();if(aiReady())return askAI(q);return _askOld(q)};
+/* ---- voz continua: el texto se genera mientras hablas ---- */
+function vcToggle(){if(VC.on)return vcStop();const SR=window.SpeechRecognition||window.webkitSpeechRecognition;if(!SR){say("Tu navegador no tiene reconocimiento de voz (usa Chrome o Edge).","sad",1);return}VC.on=true;if(!voice)togVoice();vcStart();say("Te escucho. Dime comandos como flota o vuelve a tu lugar, o hazme una pregunta.","happy",1);chips()}
+function vcStop(){VC.on=false;try{VC.rec&&VC.rec.stop()}catch(e){}VC.rec=null;listening=false;say("Dejo de escuchar.","neutral",1);chips()}
+function vcStart(){if(!VC.on||VC.rec)return;const SR=window.SpeechRecognition||window.webkitSpeechRecognition,r=new SR();r.lang="es-ES";r.continuous=true;r.interimResults=true;r.maxAlternatives=1;
+ r.onstart=()=>{listening=true};r.onresult=e=>{let f="",it="";for(let i=e.resultIndex;i<e.results.length;i++){const t=e.results[i][0].transcript;e.results[i].isFinal?f+=t:it+=t}vcText(f||it,!!f)};
+ r.onerror=e=>{if(e.error==="not-allowed"||e.error==="service-not-allowed"){VC.on=false;say("No tengo permiso para el micrófono. Actívalo en el candado de la barra de direcciones.","sad",1);chips()}};
+ r.onend=()=>{VC.rec=null;listening=false;if(VC.on&&!VC.paused)setTimeout(vcStart,250)};VC.rec=r;try{r.start()}catch(e){VC.rec=null}}
+function vcText(tx,final){tx=tx.trim();if(!tx)return;clearTimeout(VC.timer);if(!AIO.cur&&!Qd.length){$("#dlg").classList.remove("hide");$("#dn").textContent="Te escucho";$("#dt").textContent=tx}
+ const c=parseCmd(tx);if(c){if(c.key===VC.cmdKey)VC.cmdN++;else{VC.cmdKey=c.key;VC.cmdN=1}if(VC.exec!==VC.utt&&(final||VC.cmdN>=2)){VC.exec=VC.utt;execCmd(c)}}
+ if(final){const dn=VC.exec===VC.utt;VC.utt++;VC.cmdKey="";VC.cmdN=0;if(!dn)ask(tx);return}
+ if(!c&&tx.split(" ").length>=3)VC.timer=setTimeout(()=>{if(VC.exec!==VC.utt){VC.exec=VC.utt;ask(tx)}},900)}
+const _spk2=speak;speak=function(t,w){if(VC.on&&VC.rec){VC.paused=true;try{VC.rec.stop()}catch(e){}}_spk2(t,w)};
+setInterval(()=>{if(VC.on&&VC.paused){let sp=false;try{sp=speechSynthesis.speaking||speechSynthesis.pending}catch(e){}if(!sp&&!Qd.length&&!AIO.cur){VC.paused=false;vcStart()}}},600);
+mic=function(){vcToggle()};
+const _chips12=chips;chips=function(){_chips12();if(cur||true){const e=$("#chips");if(e)e.innerHTML+=`<span class="ch ${AIO.online?"up":""}">IA local: ${AIO.online?"en línea":"fuera de línea"}</span>${VC.on?'<span class="ch up">ESCUCHANDO</span>':""}`}};
+/* ---- tarjeta del analista (estructurada) y ajustes ---- */
+const _th2=tabHoy;tabHoy=function(){_th2();const a=CX&&CX.ai&&cur&&CX.ai[cur];if(!a||!a.parts)return;const p=a.parts,sg=p.estrategia!=="ninguna";$("#tb").insertAdjacentHTML("beforeend",`<div class="card" style="margin-top:12px"><h3>ANALISIS DE LA IA LOCAL (${esc(PERS[cur].name)})</h3><div class="kv"><span>Situación</span><span>${esc(p.situacion)}</span><span>Lectura</span><span>${esc(p.lectura)}</span><span>Plan prudente</span><b>${esc(p.plan)}</b><span>Estrategia propuesta</span><b>${sg?esc(SN(p.estrategia)):"ninguna"}</b><span>Confianza de la IA</span><b>${esc(p.confianza)}</b></div><p class="${a.agree?"up":"am"}">${sg?(a.agree?"El motor validado respalda esa estrategia: hay señal activa y resultado positivo fuera de muestra.":"El motor NO respalda esa estrategia (sin señal activa o sin validación positiva): es solo una idea, no una señal."):(a.engine?"La IA no propone ninguna, pero el motor sí ve una estrategia validada con señal: "+esc(SN(a.engine))+".":"Coincide con el motor: ninguna estrategia válida ahora.")}</p><small>Generado por IA en tu PC (${esc(a.model||"")}) a las ${new Date(a.t).toLocaleTimeString("es")}. Resume datos ya calculados y guardados; no cambia señales y puede equivocarse.</small></div>`)};
+var LAI2={};function aiWatch2(){const a=CX&&CX.ai&&cur&&CX.ai[cur];if(!a||!a.parts||LAI2[cur]===a.t||document.hidden)return;LAI2[cur]=a.t;sayAs(cur,"Mi análisis de ahora: "+a.parts.plan,"think")}setInterval(aiWatch2,25000);
+const _tb3=tb;tb=function(i){_tb3(i);if(i===2)$("#tb").insertAdjacentHTML("beforeend",`<div class="card" style="margin-top:12px"><h3>CHAT CON LA IA LOCAL</h3><p>Estado: <b class="${AIO.online?"up":"dn"}">${AIO.online?"en línea (tu PC responde)":"fuera de línea"}</b>. En un mercado, el personaje y la IA son uno. En la pantalla de inicio hablan con frases escritas.</p><div class="row"><input type="password" id="aip" placeholder="Clave del chat (si tu servidor la pide)" value="${esc(AIO.pass)}" style="max-width:260px"><button class="btn" onclick="AIO.pass=$('#aip').value;try{localStorage.setItem('hx_aipass',AIO.pass)}catch(e){}say('Clave guardada.','happy',1)">Guardar clave</button><button class="btn p" onclick="vcToggle()">${VC.on?"Dejar de escuchar":"Escuchar por voz"}</button></div><p class="mu">Comandos de voz instantáneos: flota · vuelve a tu lugar · pasea · quédate quieto · baila · duerme · despierta · silencio · muestra noticias/estrategias/diario/hoy · comparte pantalla. Flotar y compartir pantalla requieren que pulses un botón: el navegador no deja hacerlo solo por voz.</p></div>`)};
 </script></body></html>
